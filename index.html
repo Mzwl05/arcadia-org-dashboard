@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Organization Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Google Charts -->
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+  <!-- PapaParse -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+  <style>
+    /* =============== Arcadia Brand Tokens =============== */
+    :root{
+      /* Primary brand colors */
+      --dg1:#0c340a;
+      --dg2:#30522e;
+      --g1:#0c603f;
+      --g2:#0e744e;
+      --ga:#3e9071;
+
+      /* Highlights */
+      --lime:#bac929;
+      --lg:#d2df64;
+
+      /* UI neutrals (derived to stay on-brand) */
+      --bg: #f6f8f6;
+      --panel: #ffffff;
+      --border: rgba(12, 52, 10, 0.14);
+      --border-strong: rgba(12, 52, 10, 0.26);
+      --text: #0c340a;
+      --muted: rgba(12, 52, 10, 0.62);
+      --muted2: rgba(12, 52, 10, 0.45);
+      --focus: rgba(186, 201, 41, 0.28);
+      --wash: rgba(210, 223, 100, 0.10);
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: var(--text);
+    }
+
+    /* =============== Top Bar =============== */
+    .toolbar{
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .logo{
+      height: 28px;
+      width: auto;
+      display:block;
+    }
+
+    .title-wrap{
+      display:flex;
+      flex-direction:column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .toolbar h1{
+      margin:0;
+      font-size: 16px;
+      font-weight: 750;
+      letter-spacing: -0.01em;
+      color: var(--dg1);
+      line-height: 1.2;
+    }
+
+    .subtitle{
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 60vw;
+    }
+
+    .actions{
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn{
+      appearance:none;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--dg1);
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 650;
+      cursor:pointer;
+      transition: border-color .15s ease, transform .08s ease, background .15s ease;
+      text-decoration: none; /* so <a class="btn"> looks like button */
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      line-height: 1;
+    }
+    .btn:hover{
+      border-color: var(--border-strong);
+      transform: translateY(-1px);
+      background: rgba(62, 144, 113, 0.06);
+    }
+    .btn:active{ transform: translateY(0px); }
+
+    .btn-primary{
+      background: var(--g2);
+      border-color: transparent;
+      color: #fff;
+    }
+    .btn-primary:hover{
+      background: var(--g1);
+      border-color: transparent;
+    }
+
+    .zoom-group{
+      display:flex;
+      align-items:center;
+      gap: 6px;
+      padding: 6px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--panel);
+    }
+
+    .zoom-pill{
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      padding: 0 6px;
+      min-width: 52px;
+      text-align:center;
+      user-select:none;
+    }
+
+    /* =============== Main Area =============== */
+    #chart_outer{
+      flex: 1;
+      overflow: auto;
+      padding: 24px 18px 18px;
+    }
+
+    /* Zoom wrapper: we scale THIS */
+    #chart_scale{
+      transform-origin: top center;
+      width: fit-content;
+      margin: 0 auto;
+    }
+
+    #chart_div{
+      text-align:center;
+      padding: 10px 0 20px;
+    }
+
+    /* Bottom status */
+    #status{
+      font-size: 12px;
+      color: var(--muted);
+      padding: 10px 18px;
+      background: var(--panel);
+      border-top: 1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .status-left{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      flex-wrap: wrap;
+      min-width: 0;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(62, 144, 113, 0.10);
+      color: var(--dg1);
+      font-weight: 700;
+    }
+
+    .dot{
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--lime);
+    }
+
+    #meta{
+      color: var(--muted2);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 70vw;
+    }
+
+    /* =============== Google OrgChart overrides =============== */
+    /* Force the google chart node containers to NEVER add their own shadows/borders */
+    .google-visualization-orgchart-node,
+    .google-visualization-orgchart-node-medium{
+      border: none !important;
+      background: transparent !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+      outline: none !important;
+    }
+
+    /* Connector lines */
+    .google-visualization-orgchart-lineleft,
+    .google-visualization-orgchart-lineright,
+    .google-visualization-orgchart-linebottom{
+      border-color: rgba(48, 82, 46, 0.35) !important; /* Dark Green 2 softened */
+      border-width: 2px !important;
+    }
+
+    /* =============== Minimalist Node Card (no shadows) =============== */
+    .node-card{
+      width: 190px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 14px 12px;
+      display:flex;
+      flex-direction: column;
+      align-items:center;
+
+      /* ✅ Completely remove shadows for perfect alignment */
+      box-shadow: none !important;
+
+      transition: border-color .16s ease, transform .12s ease, background .16s ease;
+    }
+
+    .node-card:hover{
+      border-color: rgba(186, 201, 41, 0.75);
+      transform: translateY(-2px);
+      background: var(--wash);
+    }
+
+    .node-photo{
+      width: 58px;
+      height: 58px;
+      border-radius: 999px;
+      object-fit: cover;
+      background: rgba(12, 52, 10, 0.06);
+      border: 2px solid rgba(62, 144, 113, 0.18);
+      margin-bottom: 10px;
+    }
+
+    .node-name{
+      font-weight: 800;
+      font-size: 14.5px;
+      letter-spacing: -0.01em;
+      margin-bottom: 4px;
+      color: var(--dg1);
+      text-align:center;
+      line-height: 1.2;
+    }
+
+    .node-role{
+      font-size: 12.5px;
+      color: var(--muted);
+      font-weight: 650;
+      text-align:center;
+      line-height: 1.25;
+    }
+
+    .node-accent{
+      margin-top: 10px;
+      height: 4px;
+      width: 44px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--lime), var(--ga));
+      opacity: .95;
+    }
+
+    /* Keyboard focus visibility for buttons */
+    .btn:focus{
+      outline: none;
+      box-shadow: 0 0 0 4px var(--focus);
+      border-color: rgba(186, 201, 41, 0.75);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="toolbar">
+    <div class="brand">
+      <!-- ✅ Arcadia logo -->
+      <img class="logo" alt="Arcadia eFuels" src="https://arcadiaefuels.com/wp-content/uploads/2022/12/Arcadia-Identity.svg">
+      <div class="title-wrap">
+        <h1>Organization Dashboard</h1>
+        <div class="subtitle" id="subtitle">Live data from published Google Sheet CSV</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <div class="zoom-group" aria-label="Zoom controls">
+        <button class="btn" id="zoomOutBtn" title="Zoom out">−</button>
+        <div class="zoom-pill" id="zoomLabel">100%</div>
+        <button class="btn" id="zoomInBtn" title="Zoom in">+</button>
+        <button class="btn" id="zoomResetBtn" title="Reset zoom">Reset</button>
+      </div>
+
+      <!-- ✅ Link to editable spreadsheet (opens in new tab) -->
+      <a class="btn" id="sheetLink" href="#" target="_blank" rel="noopener noreferrer" title="Open the editable org chart spreadsheet">
+        Edit Spreadsheet
+      </a>
+
+      <button class="btn btn-primary" onclick="location.reload()">Refresh</button>
+    </div>
+  </div>
+
+  <div id="chart_outer">
+    <div id="chart_scale">
+      <div id="chart_div">Loading chart…</div>
+    </div>
+  </div>
+
+  <div id="status">
+    <div class="status-left">
+      <span class="badge"><span class="dot"></span><span id="statusText">Initializing…</span></span>
+      <span id="meta"></span>
+    </div>
+    <div id="timestamp"></div>
+  </div>
+
+  <script>
+    // ====== Published CSV (used for reading data) ======
+    const CSV_URL =
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vTM68SFLmYxbeh8QmNTlZ2_UQ6GNIVM_NZt24oW2cPZVvO77El9FlJe4yWgJ1co1NkUv2apsKebp2eS/pub?output=csv";
+
+    // ====== Editable Sheet Link (for editors) ======
+    // NOTE: This is the sheet’s “normal” link (not the /pub CSV).
+    // If you prefer a different internal link, replace this URL.
+    const EDIT_SHEET_URL =
+      "https://docs.google.com/spreadsheets/d/1oqcjp0sru7lC3Qt6XpiRt3uyCf0EHAjFx20VieZJUnU/edit?gid=441829817#gid=441829817";
+
+    document.getElementById("sheetLink").href = EDIT_SHEET_URL;
+
+    const chartDiv = document.getElementById("chart_div");
+    const statusText = document.getElementById("statusText");
+    const subtitle = document.getElementById("subtitle");
+    const meta = document.getElementById("meta");
+    const timestampEl = document.getElementById("timestamp");
+
+    // ====== Zoom state ======
+    const scaleEl = document.getElementById("chart_scale");
+    const zoomLabel = document.getElementById("zoomLabel");
+    let zoom = 1.0;
+    const ZOOM_MIN = 0.6;
+    const ZOOM_MAX = 1.6;
+    const ZOOM_STEP = 0.1;
+
+    function applyZoom() {
+      zoom = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, zoom));
+      scaleEl.style.transform = "scale(" + zoom.toFixed(2) + ")";
+      zoomLabel.textContent = Math.round(zoom * 100) + "%";
+    }
+
+    document.getElementById("zoomInBtn").addEventListener("click", () => {
+      zoom += ZOOM_STEP;
+      applyZoom();
+    });
+    document.getElementById("zoomOutBtn").addEventListener("click", () => {
+      zoom -= ZOOM_STEP;
+      applyZoom();
+    });
+    document.getElementById("zoomResetBtn").addEventListener("click", () => {
+      zoom = 1.0;
+      applyZoom();
+    });
+
+    // Optional: Ctrl/⌘ + wheel to zoom
+    document.getElementById("chart_outer").addEventListener("wheel", (e) => {
+      const ctrlOrCmd = e.ctrlKey || e.metaKey;
+      if (!ctrlOrCmd) return;
+      e.preventDefault();
+      zoom += (e.deltaY > 0 ? -ZOOM_STEP : ZOOM_STEP);
+      applyZoom();
+    }, { passive: false });
+
+    // ====== Load + Render ======
+    google.charts.load("current", { packages: ["orgchart"] });
+    google.charts.setOnLoadCallback(loadCSV);
+
+    function setStatus(msg) {
+      statusText.textContent = msg;
+    }
+
+    function loadCSV() {
+      setStatus("Fetching CSV…");
+      subtitle.textContent = "Fetching live org data…";
+
+      Papa.parse(CSV_URL, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+          const rows = (results && results.data) ? results.data : [];
+          setStatus("Rendering chart…");
+          drawChart(rows);
+        },
+        error: function(err) {
+          console.error(err);
+          chartDiv.textContent = "Error loading CSV.";
+          setStatus("Failed to fetch spreadsheet data.");
+          subtitle.textContent = "Check that the sheet is published and accessible.";
+        }
+      });
+    }
+
+    function drawChart(data) {
+      if (!data || data.length === 0) {
+        chartDiv.textContent = "No data found.";
+        setStatus("Spreadsheet is empty.");
+        return;
+      }
+
+      const table = new google.visualization.DataTable();
+      table.addColumn("string", "Name");
+      table.addColumn("string", "Manager");
+      table.addColumn("string", "ToolTip");
+
+      const formattedRows = [];
+
+      data.forEach(row => {
+        const name = (row["Employee Name"] || "").trim();
+        const manager = (row["Manager Name"] || "").trim();
+        const role = (row["Role"] || "").trim();
+        let photo = (row["Photo URL"] || "").trim();
+
+        if (!name) return;
+
+        if (!photo) {
+          photo =
+            "https://ui-avatars.com/api/?name=" +
+            encodeURIComponent(name) +
+            "&background=random&color=fff&size=128";
+        }
+
+        const card =
+          '<div class="node-card">' +
+            '<img class="node-photo" src="' + photo + '">' +
+            '<div class="node-name">' + escapeHtml(name) + '</div>' +
+            '<div class="node-role">' + escapeHtml(role) + '</div>' +
+            '<div class="node-accent"></div>' +
+          '</div>';
+
+        formattedRows.push([{ v: name, f: card }, manager, role]);
+      });
+
+      table.addRows(formattedRows);
+
+      const chart = new google.visualization.OrgChart(chartDiv);
+      chart.draw(table, { allowHtml: true, size: "medium" });
+
+      // Update UI meta
+      setStatus("Loaded " + formattedRows.length + " people.");
+      subtitle.textContent = "Live data from published Google Sheet CSV";
+      meta.textContent = "Source: " + CSV_URL;
+
+      const now = new Date();
+      timestampEl.textContent = "Last updated: " + now.toLocaleString();
+
+      // Ensure zoom is applied after render
+      applyZoom();
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, function(s) {
+        return {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        }[s];
+      });
+    }
+
+    // Safe global image fallback (no inline JS)
+    document.addEventListener("error", function(e) {
+      if (e.target && e.target.tagName === "IMG") {
+        e.target.src = "https://via.placeholder.com/64?text=?";
+      }
+    }, true);
+  </script>
+</body>
+</html>
