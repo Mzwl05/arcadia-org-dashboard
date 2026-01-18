@@ -15,6 +15,7 @@
     :root{
       --dg1:#0c340a; --dg2:#30522e; --g1:#0c603f; --g2:#0e744e; --ga:#3e9071;
       --lime:#bac929; --lg:#d2df64;
+
       --bg:#f6f8f6; --panel:#ffffff;
       --border: rgba(12, 52, 10, 0.14);
       --border-strong: rgba(12, 52, 10, 0.26);
@@ -41,7 +42,7 @@
     .toolbar{
       background: var(--panel);
       border-bottom: 1px solid var(--border);
-      padding: 10px 12px; /* tighter */
+      padding: 10px 12px;
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -57,7 +58,7 @@
     }
 
     .logo{
-      height: 24px;
+      height: 22px;
       width: auto;
       display:block;
     }
@@ -72,7 +73,7 @@
     .toolbar h1{
       margin:0;
       font-size: 15px;
-      font-weight: 800;
+      font-weight: 850;
       letter-spacing: -0.01em;
       color: var(--dg1);
       line-height: 1.1;
@@ -100,10 +101,10 @@
       border: 1px solid var(--border);
       background: var(--panel);
       color: var(--dg1);
-      padding: 7px 9px; /* tighter */
+      padding: 7px 9px;
       border-radius: 10px;
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 750;
       cursor:pointer;
       transition: border-color .15s ease, transform .08s ease, background .15s ease;
       text-decoration: none;
@@ -142,7 +143,7 @@
 
     .zoom-pill{
       font-size: 11px;
-      font-weight: 800;
+      font-weight: 850;
       color: var(--muted);
       padding: 0 6px;
       min-width: 46px;
@@ -158,7 +159,7 @@
       padding: 7px 9px;
       border-radius: 10px;
       font-size: 12px;
-      font-weight: 800;
+      font-weight: 850;
       cursor:pointer;
       line-height: 1;
     }
@@ -172,7 +173,7 @@
     #chart_outer{
       flex: 1;
       overflow: auto;
-      padding: 8px 8px 10px; /* tighter */
+      padding: 8px 8px 10px;
     }
 
     /* Zoom wrapper: we scale THIS */
@@ -184,7 +185,7 @@
 
     #chart_div{
       text-align:center;
-      padding: 2px 0 6px; /* tighter */
+      padding: 2px 0 6px;
     }
 
     /* Bottom status */
@@ -218,7 +219,7 @@
       border: 1px solid var(--border);
       background: rgba(62, 144, 113, 0.10);
       color: var(--dg1);
-      font-weight: 800;
+      font-weight: 850;
     }
 
     .dot{
@@ -246,12 +247,12 @@
       outline: none !important;
     }
 
-    /* ✅ Most impactful change: reduce table cell padding dramatically */
+    /* Reduce spacing around nodes */
     .google-visualization-orgchart-table{
       border-collapse: collapse !important;
     }
     .google-visualization-orgchart-table td{
-      padding: 0px 2px !important;
+      padding: 0px 1px !important;  /* even tighter */
       vertical-align: top !important;
     }
 
@@ -259,17 +260,17 @@
     .google-visualization-orgchart-lineleft,
     .google-visualization-orgchart-lineright,
     .google-visualization-orgchart-linebottom{
-      border-color: rgba(48, 82, 46, 0.30) !important;
+      border-color: rgba(48, 82, 46, 0.28) !important;
       border-width: 2px !important;
     }
 
-    /* =============== Ultra-Compact Node Card (one-page print) =============== */
+    /* =============== Ultra-Compact Node Card (NO PHOTOS) =============== */
     .node-card{
-      width: 140px;                 /* smaller */
+      width: 120px;                  /* much narrower */
       background: var(--panel);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 8px 8px 7px;         /* tighter */
+      border-radius: 9px;
+      padding: 7px 7px 6px;
       display:flex;
       flex-direction: column;
       align-items:center;
@@ -281,38 +282,28 @@
       background: var(--wash);
     }
 
-    .node-photo{
-      width: 40px;
-      height: 40px;
-      border-radius: 999px;
-      object-fit: cover;
-      background: rgba(12, 52, 10, 0.06);
-      border: 2px solid rgba(62, 144, 113, 0.18);
-      margin-bottom: 6px;
-    }
-
     .node-name{
-      font-weight: 850;
-      font-size: 12.3px;
+      font-weight: 900;
+      font-size: 12px;
       letter-spacing: -0.01em;
       margin-bottom: 2px;
       color: var(--dg1);
       text-align:center;
-      line-height: 1.1;
+      line-height: 1.05;
     }
 
     .node-role{
-      font-size: 11px;
+      font-size: 10.5px;
       color: var(--muted);
-      font-weight: 700;
+      font-weight: 750;
       text-align:center;
-      line-height: 1.15;
+      line-height: 1.1;
     }
 
     .node-accent{
       margin-top: 6px;
       height: 3px;
-      width: 34px;
+      width: 30px;
       border-radius: 999px;
       background: linear-gradient(90deg, var(--lime), var(--ga));
       opacity: .95;
@@ -335,24 +326,23 @@
       #chart_div { padding: 0 !important; }
 
       /*
-        ✅ Key: make the chart scale down for printing so it fits a single page.
-        You can adjust this number if needed.
+        Key: scale down further for print.
+        Adjust if needed (0.55–0.75 depending on org size).
       */
       #chart_scale{
-        transform: scale(0.72) !important;
+        transform: scale(0.58) !important;   /* ✅ more aggressive */
         transform-origin: top center !important;
       }
 
-      /* Encourage the browser not to split the chart */
+      /* Avoid page breaks splitting the chart */
       #chart_outer, #chart_scale, #chart_div{
         page-break-inside: avoid !important;
         break-inside: avoid !important;
       }
 
-      /* Set page margins (supported in most browsers) */
       @page {
         size: letter landscape;
-        margin: 0.35in;
+        margin: 0.30in;
       }
     }
   </style>
@@ -402,7 +392,7 @@
 
   <script>
     // ====== Multi-tab setup ======
-    // Create an INDEX sheet with column header "Tab" and list tabs (TOPCO, ENDOR, etc.)
+    // INDEX sheet must exist with header "Tab" and list TOPCO, ENDOR, etc.
     const SPREADSHEET_ID = "1oqcjp0sru7lC3Qt6XpiRt3uyCf0EHAjFx20VieZJUnU";
     const INDEX_SHEET_NAME = "INDEX";
 
@@ -430,7 +420,7 @@
     const scaleEl = document.getElementById("chart_scale");
     const zoomLabel = document.getElementById("zoomLabel");
     let zoom = 1.0;
-    const ZOOM_MIN = 0.45;     // ✅ allow smaller zoom
+    const ZOOM_MIN = 0.35;   // ✅ allow more zoom out
     const ZOOM_MAX = 1.6;
     const ZOOM_STEP = 0.1;
 
@@ -566,20 +556,12 @@
         const name = (row["Employee Name"] || "").trim();
         const manager = (row["Manager Name"] || "").trim();
         const role = (row["Role"] || "").trim();
-        let photo = (row["Photo URL"] || "").trim();
 
         if (!name) return;
 
-        if (!photo) {
-          photo =
-            "https://ui-avatars.com/api/?name=" +
-            encodeURIComponent(name) +
-            "&background=random&color=fff&size=128";
-        }
-
+        // ✅ NO PHOTO in card
         const card =
           '<div class="node-card">' +
-            '<img class="node-photo" src="' + photo + '">' +
             '<div class="node-name">' + escapeHtml(name) + '</div>' +
             '<div class="node-role">' + escapeHtml(role) + '</div>' +
             '<div class="node-accent"></div>' +
@@ -591,7 +573,7 @@
       table.addRows(formattedRows);
 
       const chart = new google.visualization.OrgChart(chartDiv);
-      chart.draw(table, { allowHtml: true, size: "small" }); /* compact */
+      chart.draw(table, { allowHtml: true, size: "small" });
 
       setStatus("Loaded " + formattedRows.length + " people (" + tabName + ").");
       meta.textContent = "Source: " + sourceUrl;
@@ -607,12 +589,6 @@
         return { "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[s];
       });
     }
-
-    document.addEventListener("error", function(e) {
-      if (e.target && e.target.tagName === "IMG") {
-        e.target.src = "https://via.placeholder.com/64?text=?";
-      }
-    }, true);
   </script>
 </body>
 </html>
