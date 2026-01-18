@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   <title>Organization Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Google Charts -->
-  <script src="https://www.gstatic.com/charts/loader.js"></script>
   <!-- PapaParse -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
@@ -16,7 +14,8 @@
       --dg1:#0c340a; --dg2:#30522e; --g1:#0c603f; --g2:#0e744e; --ga:#3e9071;
       --lime:#bac929; --lg:#d2df64;
 
-      --bg:#f6f8f6; --panel:#ffffff;
+      --bg:#f6f8f6;
+      --panel:#ffffff;
       --border: rgba(12, 52, 10, 0.14);
       --border-strong: rgba(12, 52, 10, 0.26);
       --text:#0c340a;
@@ -26,16 +25,16 @@
       --wash: rgba(210, 223, 100, 0.10);
     }
 
-    *{ box-sizing:border-box; }
+    *{ box-sizing: border-box; }
 
     body{
-      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: var(--bg);
       margin: 0;
       height: 100vh;
       display: flex;
       flex-direction: column;
+      background: var(--bg);
       color: var(--text);
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
     /* =============== Top Bar =============== */
@@ -66,12 +65,12 @@
     .title-wrap{
       display:flex;
       flex-direction:column;
-      gap: 1px;
+      gap: 2px;
       min-width: 0;
     }
 
     .toolbar h1{
-      margin:0;
+      margin: 0;
       font-size: 15px;
       font-weight: 850;
       letter-spacing: -0.01em;
@@ -96,7 +95,7 @@
       justify-content: flex-end;
     }
 
-    .btn{
+    .btn, .select{
       appearance:none;
       border: 1px solid var(--border);
       background: var(--panel);
@@ -104,31 +103,37 @@
       padding: 7px 9px;
       border-radius: 10px;
       font-size: 12px;
-      font-weight: 750;
+      font-weight: 800;
       cursor:pointer;
-      transition: border-color .15s ease, transform .08s ease, background .15s ease;
-      text-decoration: none;
+      line-height: 1;
+      text-decoration:none;
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      line-height: 1;
       white-space: nowrap;
     }
-    .btn:hover{
-      border-color: var(--border-strong);
-      transform: translateY(-1px);
-      background: rgba(62, 144, 113, 0.06);
-    }
-    .btn:active{ transform: translateY(0px); }
 
     .btn-primary{
       background: var(--g2);
       border-color: transparent;
       color: #fff;
     }
-    .btn-primary:hover{
-      background: var(--g1);
-      border-color: transparent;
+    .btn-primary:hover{ background: var(--g1); }
+
+    .btn:focus, .select:focus{
+      outline: none;
+      box-shadow: 0 0 0 4px var(--focus);
+      border-color: rgba(186, 201, 41, 0.75);
+    }
+
+    .zoom-pill{
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--muted);
+      padding: 0 6px;
+      min-width: 48px;
+      text-align:center;
+      user-select:none;
     }
 
     .zoom-group{
@@ -141,54 +146,75 @@
       background: var(--panel);
     }
 
-    .zoom-pill{
-      font-size: 11px;
-      font-weight: 850;
-      color: var(--muted);
-      padding: 0 6px;
-      min-width: 46px;
-      text-align:center;
-      user-select:none;
-    }
-
-    .select{
-      appearance:none;
-      border: 1px solid var(--border);
-      background: var(--panel);
-      color: var(--dg1);
-      padding: 7px 9px;
-      border-radius: 10px;
-      font-size: 12px;
-      font-weight: 850;
-      cursor:pointer;
-      line-height: 1;
-    }
-    .select:focus{
-      outline: none;
-      box-shadow: 0 0 0 4px var(--focus);
-      border-color: rgba(186, 201, 41, 0.75);
-    }
-
     /* =============== Main Area =============== */
-    #chart_outer{
+    #viewport{
       flex: 1;
-      overflow: auto;
-      padding: 8px 8px 10px;
+      overflow: hidden; /* key: we want to fit content inside */
+      padding: 8px;
+      position: relative;
     }
 
-    /* Zoom wrapper: we scale THIS */
-    #chart_scale{
+    /* We will scale this container to fit */
+    #scaleWrap{
       transform-origin: top center;
       width: fit-content;
       margin: 0 auto;
     }
 
-    #chart_div{
-      text-align:center;
-      padding: 2px 0 6px;
+    /* The actual chart surface (natural size) */
+    #chart{
+      display: flex;
+      flex-direction: column;
+      gap: 10px; /* spacing between levels */
+      padding: 6px 0 2px;
+      align-items: center;
     }
 
-    /* Bottom status */
+    /* Level row */
+    .level{
+      display:flex;
+      gap: 10px;              /* spacing between nodes */
+      justify-content:center;
+      align-items:flex-start;
+      flex-wrap: nowrap;      /* keep each level on one row */
+    }
+
+    /* Card */
+    .card{
+      width: 120px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 8px 7px;
+      text-align:center;
+    }
+
+    .name{
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1.05;
+      color: var(--dg1);
+      margin-bottom: 2px;
+      word-break: break-word;
+    }
+
+    .role{
+      font-size: 10.5px;
+      font-weight: 750;
+      line-height: 1.1;
+      color: var(--muted);
+      word-break: break-word;
+    }
+
+    .accent{
+      margin: 6px auto 0;
+      height: 3px;
+      width: 30px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--lime), var(--ga));
+    }
+
+    /* Status footer */
     #status{
       font-size: 11px;
       color: var(--muted);
@@ -196,151 +222,19 @@
       background: var(--panel);
       border-top: 1px solid var(--border);
       display:flex;
-      align-items:center;
       justify-content:space-between;
       gap: 8px;
       flex-wrap: wrap;
     }
 
-    .status-left{
-      display:flex;
-      align-items:center;
-      gap: 8px;
-      flex-wrap: wrap;
-      min-width: 0;
-    }
-
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap: 6px;
-      padding: 5px 9px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(62, 144, 113, 0.10);
-      color: var(--dg1);
-      font-weight: 850;
-    }
-
-    .dot{
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--lime);
-    }
-
-    #meta{
-      color: var(--muted2);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 70vw;
-    }
-
-    /* =============== Google OrgChart overrides =============== */
-    .google-visualization-orgchart-node,
-    .google-visualization-orgchart-node-medium{
-      border: none !important;
-      background: transparent !important;
-      padding: 0 !important;
-      box-shadow: none !important;
-      outline: none !important;
-    }
-
-    /* Reduce spacing around nodes */
-    .google-visualization-orgchart-table{
-      border-collapse: collapse !important;
-    }
-    .google-visualization-orgchart-table td{
-      padding: 0px 1px !important;  /* even tighter */
-      vertical-align: top !important;
-    }
-
-    /* Connector lines */
-    .google-visualization-orgchart-lineleft,
-    .google-visualization-orgchart-lineright,
-    .google-visualization-orgchart-linebottom{
-      border-color: rgba(48, 82, 46, 0.28) !important;
-      border-width: 2px !important;
-    }
-
-    /* =============== Ultra-Compact Node Card (NO PHOTOS) =============== */
-    .node-card{
-      width: 120px;                  /* much narrower */
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 9px;
-      padding: 7px 7px 6px;
-      display:flex;
-      flex-direction: column;
-      align-items:center;
-      box-shadow: none !important;
-    }
-
-    .node-card:hover{
-      border-color: rgba(186, 201, 41, 0.75);
-      background: var(--wash);
-    }
-
-    .node-name{
-      font-weight: 900;
-      font-size: 12px;
-      letter-spacing: -0.01em;
-      margin-bottom: 2px;
-      color: var(--dg1);
-      text-align:center;
-      line-height: 1.05;
-    }
-
-    .node-role{
-      font-size: 10.5px;
-      color: var(--muted);
-      font-weight: 750;
-      text-align:center;
-      line-height: 1.1;
-    }
-
-    .node-accent{
-      margin-top: 6px;
-      height: 3px;
-      width: 30px;
-      border-radius: 999px;
-      background: linear-gradient(90deg, var(--lime), var(--ga));
-      opacity: .95;
-    }
-
-    .btn:focus{
-      outline: none;
-      box-shadow: 0 0 0 4px var(--focus);
-      border-color: rgba(186, 201, 41, 0.75);
-    }
-
-    /* =============== PRINT: force one page =============== */
+    /* Print */
     @media print{
-      /* Hide controls */
-      .toolbar, #status { display: none !important; }
+      .toolbar, #status{ display:none !important; }
+      body{ background:#fff !important; }
+      #viewport{ padding: 0 !important; }
+      #scaleWrap{ transform: scale(1) !important; } /* JS will set a fit scale before print if desired */
 
-      /* Remove background + extra spacing */
-      body { background: #fff !important; }
-      #chart_outer { padding: 0 !important; overflow: visible !important; }
-      #chart_div { padding: 0 !important; }
-
-      /*
-        Key: scale down further for print.
-        Adjust if needed (0.55–0.75 depending on org size).
-      */
-      #chart_scale{
-        transform: scale(0.58) !important;   /* ✅ more aggressive */
-        transform-origin: top center !important;
-      }
-
-      /* Avoid page breaks splitting the chart */
-      #chart_outer, #chart_scale, #chart_div{
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-      }
-
-      @page {
+      @page{
         size: letter landscape;
         margin: 0.30in;
       }
@@ -354,7 +248,7 @@
       <img class="logo" alt="Arcadia eFuels" src="https://arcadiaefuels.com/wp-content/uploads/2022/12/Arcadia-Identity.svg">
       <div class="title-wrap">
         <h1>Organization Dashboard</h1>
-        <div class="subtitle" id="subtitle">Live data</div>
+        <div class="subtitle" id="subtitle">Loading…</div>
       </div>
     </div>
 
@@ -363,36 +257,29 @@
 
       <div class="zoom-group" aria-label="Zoom controls">
         <button class="btn" id="zoomOutBtn" title="Zoom out">−</button>
-        <div class="zoom-pill" id="zoomLabel">100%</div>
+        <div class="zoom-pill" id="zoomLabel">Fit</div>
         <button class="btn" id="zoomInBtn" title="Zoom in">+</button>
-        <button class="btn" id="zoomResetBtn" title="Reset zoom">Reset</button>
+        <button class="btn" id="zoomFitBtn" title="Fit to window">Fit</button>
       </div>
 
-      <a class="btn" id="sheetLink" href="#" target="_blank" rel="noopener noreferrer" title="Open the editable org chart spreadsheet">
-        Edit Spreadsheet
-      </a>
-
+      <a class="btn" id="sheetLink" href="#" target="_blank" rel="noopener noreferrer">Edit Spreadsheet</a>
       <button class="btn btn-primary" id="refreshBtn">Refresh</button>
     </div>
   </div>
 
-  <div id="chart_outer">
-    <div id="chart_scale">
-      <div id="chart_div">Loading chart…</div>
+  <div id="viewport">
+    <div id="scaleWrap">
+      <div id="chart"></div>
     </div>
   </div>
 
   <div id="status">
-    <div class="status-left">
-      <span class="badge"><span class="dot"></span><span id="statusText">Initializing…</span></span>
-      <span id="meta"></span>
-    </div>
-    <div id="timestamp"></div>
+    <div id="statusLeft">Initializing…</div>
+    <div id="statusRight"></div>
   </div>
 
   <script>
-    // ====== Multi-tab setup ======
-    // INDEX sheet must exist with header "Tab" and list TOPCO, ENDOR, etc.
+    // ====== Sheet config ======
     const SPREADSHEET_ID = "1oqcjp0sru7lC3Qt6XpiRt3uyCf0EHAjFx20VieZJUnU";
     const INDEX_SHEET_NAME = "INDEX";
 
@@ -401,91 +288,77 @@
              "/gviz/tq?tqx=out:csv&sheet=" + encodeURIComponent(sheetName);
     }
 
-    const EDIT_SHEET_URL = "https://docs.google.com/spreadsheets/d/" + SPREADSHEET_ID + "/edit";
-    document.getElementById("sheetLink").href = EDIT_SHEET_URL;
+    document.getElementById("sheetLink").href =
+      "https://docs.google.com/spreadsheets/d/" + SPREADSHEET_ID + "/edit";
 
-    const chartDiv = document.getElementById("chart_div");
-    const statusText = document.getElementById("statusText");
-    const subtitle = document.getElementById("subtitle");
-    const meta = document.getElementById("meta");
-    const timestampEl = document.getElementById("timestamp");
+    // ====== UI refs ======
     const tabSelect = document.getElementById("tabSelect");
+    const subtitle = document.getElementById("subtitle");
+    const statusLeft = document.getElementById("statusLeft");
+    const statusRight = document.getElementById("statusRight");
 
-    document.getElementById("refreshBtn").addEventListener("click", () => {
-      const selectedTab = tabSelect.value;
-      if (selectedTab) loadOrgTab(selectedTab);
-    });
+    const viewport = document.getElementById("viewport");
+    const scaleWrap = document.getElementById("scaleWrap");
+    const chartEl = document.getElementById("chart");
 
     // ====== Zoom state ======
-    const scaleEl = document.getElementById("chart_scale");
+    let userZoom = null; // null means "auto-fit"
+    let currentScale = 1;
+
     const zoomLabel = document.getElementById("zoomLabel");
-    let zoom = 1.0;
-    const ZOOM_MIN = 0.35;   // ✅ allow more zoom out
-    const ZOOM_MAX = 1.6;
     const ZOOM_STEP = 0.1;
 
-    function applyZoom() {
-      zoom = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, zoom));
-      scaleEl.style.transform = "scale(" + zoom.toFixed(2) + ")";
-      zoomLabel.textContent = Math.round(zoom * 100) + "%";
-    }
-
     document.getElementById("zoomInBtn").addEventListener("click", () => {
-      zoom += ZOOM_STEP;
-      applyZoom();
+      if (userZoom === null) userZoom = currentScale;
+      userZoom = Math.min(2, +(userZoom + ZOOM_STEP).toFixed(2));
+      applyScale(userZoom, "Manual");
     });
+
     document.getElementById("zoomOutBtn").addEventListener("click", () => {
-      zoom -= ZOOM_STEP;
-      applyZoom();
-    });
-    document.getElementById("zoomResetBtn").addEventListener("click", () => {
-      zoom = 1.0;
-      applyZoom();
+      if (userZoom === null) userZoom = currentScale;
+      userZoom = Math.max(0.2, +(userZoom - ZOOM_STEP).toFixed(2));
+      applyScale(userZoom, "Manual");
     });
 
-    // Ctrl/⌘ + wheel to zoom
-    document.getElementById("chart_outer").addEventListener("wheel", (e) => {
-      const ctrlOrCmd = e.ctrlKey || e.metaKey;
-      if (!ctrlOrCmd) return;
-      e.preventDefault();
-      zoom += (e.deltaY > 0 ? -ZOOM_STEP : ZOOM_STEP);
-      applyZoom();
-    }, { passive: false });
+    document.getElementById("zoomFitBtn").addEventListener("click", () => {
+      userZoom = null;
+      fitToViewport();
+    });
 
-    // ====== Load + Render ======
-    google.charts.load("current", { packages: ["orgchart"] });
-    google.charts.setOnLoadCallback(init);
+    document.getElementById("refreshBtn").addEventListener("click", () => {
+      const tab = tabSelect.value;
+      if (tab) loadOrgTab(tab);
+    });
 
-    function setStatus(msg) {
-      statusText.textContent = msg;
-    }
+    // Re-fit on window resize (only if user not in manual zoom mode)
+    window.addEventListener("resize", () => {
+      if (userZoom === null) fitToViewport();
+    });
 
-    function init() {
-      applyZoom();
-      loadIndexTabs();
+    // ====== Startup ======
+    loadIndexTabs();
+
+    function setStatus(left, right){
+      statusLeft.textContent = left || "";
+      statusRight.textContent = right || "";
     }
 
     function loadIndexTabs() {
-      setStatus("Fetching tabs…");
       subtitle.textContent = "Loading views…";
+      setStatus("Fetching tabs…", "");
 
-      const url = sheetCsvUrlByName(INDEX_SHEET_NAME);
-
-      Papa.parse(url, {
+      Papa.parse(sheetCsvUrlByName(INDEX_SHEET_NAME), {
         download: true,
         header: true,
         skipEmptyLines: true,
-        complete: function(results) {
+        complete: (results) => {
           const rows = (results && results.data) ? results.data : [];
-          const tabs = rows
-            .map(r => (r["Tab"] || "").trim())
-            .filter(Boolean);
+          const tabs = rows.map(r => (r["Tab"] || "").trim()).filter(Boolean);
 
           if (!tabs.length) {
-            chartDiv.textContent = "No tabs found. Add INDEX sheet with header 'Tab' and list TOPCO, ENDOR, etc.";
-            setStatus("Missing INDEX configuration.");
-            subtitle.textContent = "Please configure INDEX sheet.";
-            meta.textContent = "Expected: INDEX!A1 = Tab, INDEX!A2.. = tab names";
+            chartEl.innerHTML = "<div style='padding:10px;color:#0c340a'>No tabs found. In INDEX tab, set A1=Tab and list TOPCO/ENDOR in column A.</div>";
+            setStatus("INDEX is empty or missing 'Tab' column.", "");
+            subtitle.textContent = "INDEX configuration needed";
             return;
           }
 
@@ -499,96 +372,195 @@
 
           tabSelect.onchange = () => loadOrgTab(tabSelect.value);
 
-          setStatus("Ready.");
           loadOrgTab(tabs[0]);
         },
-        error: function(err) {
+        error: (err) => {
           console.error(err);
-          chartDiv.textContent = "Error loading tab index.";
-          setStatus("Failed to fetch INDEX sheet.");
-          subtitle.textContent = "Check sheet access/publish settings.";
+          chartEl.innerHTML = "<div style='padding:10px;color:#0c340a'>Error loading INDEX. Check publish/view permissions.</div>";
+          setStatus("Failed to load INDEX.", "");
+          subtitle.textContent = "Check sheet access";
         }
       });
     }
 
     function loadOrgTab(tabName) {
-      if (!tabName) return;
+      subtitle.textContent = "Loading " + tabName + "…";
+      setStatus("Fetching " + tabName + "…", "");
+      chartEl.innerHTML = "";
 
-      setStatus("Fetching " + tabName + "…");
-      subtitle.textContent = "Live data (" + tabName + ")";
-      chartDiv.textContent = "Loading chart…";
-
-      const url = sheetCsvUrlByName(tabName);
-
-      Papa.parse(url, {
+      Papa.parse(sheetCsvUrlByName(tabName), {
         download: true,
         header: true,
         skipEmptyLines: true,
-        complete: function(results) {
-          const rows = (results && results.data) ? results.data : [];
-          setStatus("Rendering " + tabName + "…");
-          drawChart(rows, tabName, url);
+        complete: (results) => {
+          const data = (results && results.data) ? results.data : [];
+          renderOrg(data, tabName);
         },
-        error: function(err) {
+        error: (err) => {
           console.error(err);
-          chartDiv.textContent = "Error loading data for " + tabName + ".";
-          setStatus("Failed to fetch " + tabName + " data.");
-          subtitle.textContent = "Check tab name spelling in INDEX.";
+          chartEl.innerHTML = "<div style='padding:10px;color:#0c340a'>Error loading " + escapeHtml(tabName) + " tab.</div>";
+          setStatus("Failed to load " + tabName + ".", "");
+          subtitle.textContent = "Load error";
         }
       });
     }
 
-    function drawChart(data, tabName, sourceUrl) {
-      if (!data || data.length === 0) {
-        chartDiv.textContent = "No data found in " + tabName + ".";
-        setStatus("Tab is empty.");
+    function renderOrg(data, tabName){
+      const people = normalizePeople(data);
+
+      if (people.length === 0) {
+        chartEl.innerHTML = "<div style='padding:10px;color:#0c340a'>No rows found in " + escapeHtml(tabName) + ".</div>";
+        setStatus("No data in " + tabName + ".", "");
+        subtitle.textContent = "Empty view";
         return;
       }
 
-      const table = new google.visualization.DataTable();
-      table.addColumn("string", "Name");
-      table.addColumn("string", "Manager");
-      table.addColumn("string", "ToolTip");
+      // Build hierarchy
+      const { roots, childrenMap } = buildHierarchy(people);
 
-      const formattedRows = [];
+      // Create level rows (BFS)
+      const levels = buildLevels(roots, childrenMap);
 
-      data.forEach(row => {
-        const name = (row["Employee Name"] || "").trim();
-        const manager = (row["Manager Name"] || "").trim();
-        const role = (row["Role"] || "").trim();
-
-        if (!name) return;
-
-        // ✅ NO PHOTO in card
-        const card =
-          '<div class="node-card">' +
-            '<div class="node-name">' + escapeHtml(name) + '</div>' +
-            '<div class="node-role">' + escapeHtml(role) + '</div>' +
-            '<div class="node-accent"></div>' +
-          '</div>';
-
-        formattedRows.push([{ v: name, f: card }, manager, role]);
+      // Render
+      chartEl.innerHTML = "";
+      levels.forEach(level => {
+        const row = document.createElement("div");
+        row.className = "level";
+        level.forEach(p => row.appendChild(makeCard(p)));
+        chartEl.appendChild(row);
       });
-
-      table.addRows(formattedRows);
-
-      const chart = new google.visualization.OrgChart(chartDiv);
-      chart.draw(table, { allowHtml: true, size: "small" });
-
-      setStatus("Loaded " + formattedRows.length + " people (" + tabName + ").");
-      meta.textContent = "Source: " + sourceUrl;
 
       const now = new Date();
-      timestampEl.textContent = "Last updated: " + now.toLocaleString();
+      subtitle.textContent = "View: " + tabName;
+      setStatus("Loaded " + people.length + " people.", "Updated: " + now.toLocaleString());
 
-      applyZoom();
+      // Fit automatically unless user manually zoomed
+      if (userZoom === null) fitToViewport();
+      else applyScale(userZoom, "Manual");
     }
 
-    function escapeHtml(str) {
-      return String(str).replace(/[&<>"']/g, function(s) {
-        return { "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[s];
+    function normalizePeople(rows){
+      return rows
+        .map(r => ({
+          name: (r["Employee Name"] || "").trim(),
+          manager: (r["Manager Name"] || "").trim(),
+          role: (r["Role"] || "").trim()
+        }))
+        .filter(p => p.name);
+    }
+
+    function buildHierarchy(people){
+      const byName = new Map();
+      people.forEach(p => byName.set(p.name, p));
+
+      const childrenMap = new Map();
+      function addChild(manager, child){
+        if (!childrenMap.has(manager)) childrenMap.set(manager, []);
+        childrenMap.get(manager).push(child);
+      }
+
+      // Track roots: those with no manager or manager missing
+      const roots = [];
+      people.forEach(p => {
+        const m = p.manager;
+        if (!m || !byName.has(m)) roots.push(p);
+        else addChild(m, p);
       });
+
+      // Keep stable-ish ordering
+      for (const [k, arr] of childrenMap.entries()){
+        arr.sort((a,b) => a.name.localeCompare(b.name));
+      }
+      roots.sort((a,b) => a.name.localeCompare(b.name));
+
+      return { roots, childrenMap };
     }
+
+    function buildLevels(roots, childrenMap){
+      const levels = [];
+      let current = roots.slice();
+      const seen = new Set();
+
+      // BFS by depth
+      while (current.length){
+        const next = [];
+        const level = [];
+
+        current.forEach(p => {
+          if (seen.has(p.name)) return;
+          seen.add(p.name);
+          level.push(p);
+
+          const kids = childrenMap.get(p.name) || [];
+          kids.forEach(k => next.push(k));
+        });
+
+        if (level.length) levels.push(level);
+        current = next;
+      }
+      return levels;
+    }
+
+    function makeCard(p){
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const name = document.createElement("div");
+      name.className = "name";
+      name.textContent = p.name;
+
+      const role = document.createElement("div");
+      role.className = "role";
+      role.textContent = p.role;
+
+      const accent = document.createElement("div");
+      accent.className = "accent";
+
+      card.appendChild(name);
+      card.appendChild(role);
+      card.appendChild(accent);
+      return card;
+    }
+
+    function fitToViewport(){
+      // Reset to natural size
+      scaleWrap.style.transform = "scale(1)";
+      const vw = viewport.clientWidth;
+      const vh = viewport.clientHeight;
+
+      // Measure natural size
+      const rect = scaleWrap.getBoundingClientRect();
+      const naturalW = rect.width;
+      const naturalH = rect.height;
+
+      // Compute scale to fit (with a tiny padding factor)
+      const pad = 0.96;
+      const scaleW = (vw / naturalW) * pad;
+      const scaleH = (vh / naturalH) * pad;
+
+      const scale = Math.min(scaleW, scaleH, 1); // never upscale above 1 in auto-fit
+      applyScale(scale, "Fit");
+    }
+
+    function applyScale(scale, modeLabel){
+      currentScale = scale;
+      scaleWrap.style.transform = "scale(" + scale.toFixed(3) + ")";
+      zoomLabel.textContent = (modeLabel === "Fit")
+        ? "Fit"
+        : Math.round(scale * 100) + "%";
+    }
+
+    function escapeHtml(str){
+      return String(str).replace(/[&<>"']/g, s => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+      }[s]));
+    }
+
+    // OPTIONAL: before printing, force-fit so it prints as one page as best as possible
+    window.addEventListener("beforeprint", () => {
+      userZoom = null;
+      fitToViewport();
+    });
   </script>
 </body>
 </html>
