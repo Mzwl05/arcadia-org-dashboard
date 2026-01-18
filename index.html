@@ -13,23 +13,12 @@
   <style>
     /* =============== Arcadia Brand Tokens =============== */
     :root{
-      /* Primary brand colors */
-      --dg1:#0c340a;
-      --dg2:#30522e;
-      --g1:#0c603f;
-      --g2:#0e744e;
-      --ga:#3e9071;
-
-      /* Highlights */
-      --lime:#bac929;
-      --lg:#d2df64;
-
-      /* UI neutrals (derived to stay on-brand) */
-      --bg: #f6f8f6;
-      --panel: #ffffff;
+      --dg1:#0c340a; --dg2:#30522e; --g1:#0c603f; --g2:#0e744e; --ga:#3e9071;
+      --lime:#bac929; --lg:#d2df64;
+      --bg:#f6f8f6; --panel:#ffffff;
       --border: rgba(12, 52, 10, 0.14);
       --border-strong: rgba(12, 52, 10, 0.26);
-      --text: #0c340a;
+      --text:#0c340a;
       --muted: rgba(12, 52, 10, 0.62);
       --muted2: rgba(12, 52, 10, 0.45);
       --focus: rgba(186, 201, 41, 0.28);
@@ -52,23 +41,23 @@
     .toolbar{
       background: var(--panel);
       border-bottom: 1px solid var(--border);
-      padding: 14px 18px;
+      padding: 10px 12px; /* tighter */
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
     .brand{
       display:flex;
       align-items:center;
-      gap: 12px;
+      gap: 10px;
       min-width: 0;
     }
 
     .logo{
-      height: 28px;
+      height: 24px;
       width: auto;
       display:block;
     }
@@ -76,32 +65,32 @@
     .title-wrap{
       display:flex;
       flex-direction:column;
-      gap: 2px;
+      gap: 1px;
       min-width: 0;
     }
 
     .toolbar h1{
       margin:0;
-      font-size: 16px;
-      font-weight: 750;
+      font-size: 15px;
+      font-weight: 800;
       letter-spacing: -0.01em;
       color: var(--dg1);
-      line-height: 1.2;
+      line-height: 1.1;
     }
 
     .subtitle{
-      font-size: 12px;
+      font-size: 11px;
       color: var(--muted);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 60vw;
+      max-width: 55vw;
     }
 
     .actions{
       display:flex;
       align-items:center;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
       justify-content: flex-end;
     }
@@ -111,10 +100,10 @@
       border: 1px solid var(--border);
       background: var(--panel);
       color: var(--dg1);
-      padding: 8px 10px;
+      padding: 7px 9px; /* tighter */
       border-radius: 10px;
-      font-size: 13px;
-      font-weight: 650;
+      font-size: 12px;
+      font-weight: 700;
       cursor:pointer;
       transition: border-color .15s ease, transform .08s ease, background .15s ease;
       text-decoration: none;
@@ -144,19 +133,19 @@
     .zoom-group{
       display:flex;
       align-items:center;
-      gap: 6px;
-      padding: 6px;
+      gap: 5px;
+      padding: 5px;
       border: 1px solid var(--border);
       border-radius: 12px;
       background: var(--panel);
     }
 
     .zoom-pill{
-      font-size: 12px;
-      font-weight: 700;
+      font-size: 11px;
+      font-weight: 800;
       color: var(--muted);
       padding: 0 6px;
-      min-width: 52px;
+      min-width: 46px;
       text-align:center;
       user-select:none;
     }
@@ -166,10 +155,10 @@
       border: 1px solid var(--border);
       background: var(--panel);
       color: var(--dg1);
-      padding: 8px 10px;
+      padding: 7px 9px;
       border-radius: 10px;
-      font-size: 13px;
-      font-weight: 700;
+      font-size: 12px;
+      font-weight: 800;
       cursor:pointer;
       line-height: 1;
     }
@@ -183,7 +172,7 @@
     #chart_outer{
       flex: 1;
       overflow: auto;
-      padding: 14px 12px 12px; /* tighter padding for one-pager feel */
+      padding: 8px 8px 10px; /* tighter */
     }
 
     /* Zoom wrapper: we scale THIS */
@@ -195,27 +184,27 @@
 
     #chart_div{
       text-align:center;
-      padding: 6px 0 10px; /* tighter */
+      padding: 2px 0 6px; /* tighter */
     }
 
     /* Bottom status */
     #status{
-      font-size: 12px;
+      font-size: 11px;
       color: var(--muted);
-      padding: 10px 18px;
+      padding: 8px 12px;
       background: var(--panel);
       border-top: 1px solid var(--border);
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
     .status-left{
       display:flex;
       align-items:center;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
       min-width: 0;
     }
@@ -224,12 +213,12 @@
       display:inline-flex;
       align-items:center;
       gap: 6px;
-      padding: 6px 10px;
+      padding: 5px 9px;
       border-radius: 999px;
       border: 1px solid var(--border);
       background: rgba(62, 144, 113, 0.10);
       color: var(--dg1);
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .dot{
@@ -248,7 +237,6 @@
     }
 
     /* =============== Google OrgChart overrides =============== */
-    /* Force the google chart node containers to NEVER add their own shadows/borders */
     .google-visualization-orgchart-node,
     .google-visualization-orgchart-node-medium{
       border: none !important;
@@ -258,12 +246,12 @@
       outline: none !important;
     }
 
-    /* Tighter layout: reduce internal padding around chart cells */
+    /* ✅ Most impactful change: reduce table cell padding dramatically */
     .google-visualization-orgchart-table{
       border-collapse: collapse !important;
     }
     .google-visualization-orgchart-table td{
-      padding: 2px 4px !important;   /* ✅ reduces node spacing */
+      padding: 0px 2px !important;
       vertical-align: top !important;
     }
 
@@ -271,78 +259,101 @@
     .google-visualization-orgchart-lineleft,
     .google-visualization-orgchart-lineright,
     .google-visualization-orgchart-linebottom{
-      border-color: rgba(48, 82, 46, 0.35) !important;
+      border-color: rgba(48, 82, 46, 0.30) !important;
       border-width: 2px !important;
     }
 
-    /* =============== Minimalist Node Card (compact for one-pager) =============== */
+    /* =============== Ultra-Compact Node Card (one-page print) =============== */
     .node-card{
-      width: 165px;                 /* ✅ narrower to fit one-pager */
+      width: 140px;                 /* smaller */
       background: var(--panel);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 10px 10px 9px;       /* ✅ smaller padding */
+      border-radius: 10px;
+      padding: 8px 8px 7px;         /* tighter */
       display:flex;
       flex-direction: column;
       align-items:center;
-      box-shadow: none !important;  /* keep crisp borders */
-      transition: border-color .16s ease, transform .12s ease, background .16s ease;
+      box-shadow: none !important;
     }
 
     .node-card:hover{
       border-color: rgba(186, 201, 41, 0.75);
-      transform: translateY(-1px);
       background: var(--wash);
     }
 
     .node-photo{
-      width: 48px;                  /* ✅ smaller photo */
-      height: 48px;
+      width: 40px;
+      height: 40px;
       border-radius: 999px;
       object-fit: cover;
       background: rgba(12, 52, 10, 0.06);
       border: 2px solid rgba(62, 144, 113, 0.18);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .node-name{
-      font-weight: 800;
-      font-size: 13.5px;            /* ✅ smaller text */
+      font-weight: 850;
+      font-size: 12.3px;
       letter-spacing: -0.01em;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
       color: var(--dg1);
+      text-align:center;
+      line-height: 1.1;
+    }
+
+    .node-role{
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 700;
       text-align:center;
       line-height: 1.15;
     }
 
-    .node-role{
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 650;
-      text-align:center;
-      line-height: 1.2;
-    }
-
     .node-accent{
-      margin-top: 8px;
-      height: 3px;                  /* ✅ slimmer accent */
-      width: 40px;
+      margin-top: 6px;
+      height: 3px;
+      width: 34px;
       border-radius: 999px;
       background: linear-gradient(90deg, var(--lime), var(--ga));
       opacity: .95;
     }
 
-    /* Keyboard focus visibility for buttons */
     .btn:focus{
       outline: none;
       box-shadow: 0 0 0 4px var(--focus);
       border-color: rgba(186, 201, 41, 0.75);
     }
 
+    /* =============== PRINT: force one page =============== */
     @media print{
+      /* Hide controls */
       .toolbar, #status { display: none !important; }
-      #chart_outer { padding: 0 !important; }
+
+      /* Remove background + extra spacing */
       body { background: #fff !important; }
+      #chart_outer { padding: 0 !important; overflow: visible !important; }
+      #chart_div { padding: 0 !important; }
+
+      /*
+        ✅ Key: make the chart scale down for printing so it fits a single page.
+        You can adjust this number if needed.
+      */
+      #chart_scale{
+        transform: scale(0.72) !important;
+        transform-origin: top center !important;
+      }
+
+      /* Encourage the browser not to split the chart */
+      #chart_outer, #chart_scale, #chart_div{
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      /* Set page margins (supported in most browsers) */
+      @page {
+        size: letter landscape;
+        margin: 0.35in;
+      }
     }
   </style>
 </head>
@@ -353,12 +364,11 @@
       <img class="logo" alt="Arcadia eFuels" src="https://arcadiaefuels.com/wp-content/uploads/2022/12/Arcadia-Identity.svg">
       <div class="title-wrap">
         <h1>Organization Dashboard</h1>
-        <div class="subtitle" id="subtitle">Live data from published Google Sheet CSV</div>
+        <div class="subtitle" id="subtitle">Live data</div>
       </div>
     </div>
 
     <div class="actions">
-      <!-- ✅ NEW: Tab selector (TOPCO / ENDOR / any new sheet tab) -->
       <select class="select" id="tabSelect" title="Select organization view"></select>
 
       <div class="zoom-group" aria-label="Zoom controls">
@@ -391,38 +401,17 @@
   </div>
 
   <script>
-    // =========================
-    // REQUIRED GOOGLE SHEET SETUP FOR MULTI-TAB DASHBOARD
-    // -------------------------
-    // 1) Create a tab named "INDEX" in your spreadsheet.
-    // 2) In INDEX!A1, put header: Tab
-    // 3) In INDEX!A2:A, list the sheet tabs you want to show, e.g.:
-    //      TOPCO
-    //      ENDOR
-    //      (any future tab names)
-    //
-    // Each listed tab must have the SAME columns:
-    //   Employee Name | Manager Name | Role | Photo URL
-    // =========================
-
-    // ====== Spreadsheet ID (used to build per-tab published CSV URLs) ======
+    // ====== Multi-tab setup ======
+    // Create an INDEX sheet with column header "Tab" and list tabs (TOPCO, ENDOR, etc.)
     const SPREADSHEET_ID = "1oqcjp0sru7lC3Qt6XpiRt3uyCf0EHAjFx20VieZJUnU";
+    const INDEX_SHEET_NAME = "INDEX";
 
-    // ====== Published base (public) — we will fetch per-tab CSV using GViz ======
-    // This does NOT require knowing GID values.
     function sheetCsvUrlByName(sheetName){
-      // Google Visualization API returns CSV for a specific sheet tab name
       return "https://docs.google.com/spreadsheets/d/" + SPREADSHEET_ID +
              "/gviz/tq?tqx=out:csv&sheet=" + encodeURIComponent(sheetName);
     }
 
-    // Index tab that lists which tabs to show in the dashboard
-    const INDEX_SHEET_NAME = "INDEX";
-
-    // Editable sheet link
-    const EDIT_SHEET_URL =
-      "https://docs.google.com/spreadsheets/d/" + SPREADSHEET_ID + "/edit";
-
+    const EDIT_SHEET_URL = "https://docs.google.com/spreadsheets/d/" + SPREADSHEET_ID + "/edit";
     document.getElementById("sheetLink").href = EDIT_SHEET_URL;
 
     const chartDiv = document.getElementById("chart_div");
@@ -433,7 +422,6 @@
     const tabSelect = document.getElementById("tabSelect");
 
     document.getElementById("refreshBtn").addEventListener("click", () => {
-      // refresh current tab without reloading page
       const selectedTab = tabSelect.value;
       if (selectedTab) loadOrgTab(selectedTab);
     });
@@ -442,7 +430,7 @@
     const scaleEl = document.getElementById("chart_scale");
     const zoomLabel = document.getElementById("zoomLabel");
     let zoom = 1.0;
-    const ZOOM_MIN = 0.6;
+    const ZOOM_MIN = 0.45;     // ✅ allow smaller zoom
     const ZOOM_MAX = 1.6;
     const ZOOM_STEP = 0.1;
 
@@ -465,7 +453,7 @@
       applyZoom();
     });
 
-    // Optional: Ctrl/⌘ + wheel to zoom
+    // Ctrl/⌘ + wheel to zoom
     document.getElementById("chart_outer").addEventListener("wheel", (e) => {
       const ctrlOrCmd = e.ctrlKey || e.metaKey;
       if (!ctrlOrCmd) return;
@@ -489,7 +477,7 @@
 
     function loadIndexTabs() {
       setStatus("Fetching tabs…");
-      subtitle.textContent = "Loading available organization views…";
+      subtitle.textContent = "Loading views…";
 
       const url = sheetCsvUrlByName(INDEX_SHEET_NAME);
 
@@ -504,14 +492,13 @@
             .filter(Boolean);
 
           if (!tabs.length) {
-            chartDiv.textContent = "No tabs found. Create an INDEX sheet with a 'Tab' column listing TOPCO, ENDOR, etc.";
-            setStatus("Missing INDEX tab configuration.");
+            chartDiv.textContent = "No tabs found. Add INDEX sheet with header 'Tab' and list TOPCO, ENDOR, etc.";
+            setStatus("Missing INDEX configuration.");
             subtitle.textContent = "Please configure INDEX sheet.";
             meta.textContent = "Expected: INDEX!A1 = Tab, INDEX!A2.. = tab names";
             return;
           }
 
-          // Populate dropdown
           tabSelect.innerHTML = "";
           tabs.forEach(t => {
             const opt = document.createElement("option");
@@ -520,9 +507,8 @@
             tabSelect.appendChild(opt);
           });
 
-          tabSelect.addEventListener("change", () => loadOrgTab(tabSelect.value));
+          tabSelect.onchange = () => loadOrgTab(tabSelect.value);
 
-          // Load first tab by default
           setStatus("Ready.");
           loadOrgTab(tabs[0]);
         },
@@ -530,7 +516,7 @@
           console.error(err);
           chartDiv.textContent = "Error loading tab index.";
           setStatus("Failed to fetch INDEX sheet.");
-          subtitle.textContent = "Check that your sheet is accessible and INDEX tab exists.";
+          subtitle.textContent = "Check sheet access/publish settings.";
         }
       });
     }
@@ -539,7 +525,7 @@
       if (!tabName) return;
 
       setStatus("Fetching " + tabName + "…");
-      subtitle.textContent = "Fetching live org data (" + tabName + ")…";
+      subtitle.textContent = "Live data (" + tabName + ")";
       chartDiv.textContent = "Loading chart…";
 
       const url = sheetCsvUrlByName(tabName);
@@ -557,7 +543,7 @@
           console.error(err);
           chartDiv.textContent = "Error loading data for " + tabName + ".";
           setStatus("Failed to fetch " + tabName + " data.");
-          subtitle.textContent = "Check that the tab exists and is spelled exactly as listed in INDEX.";
+          subtitle.textContent = "Check tab name spelling in INDEX.";
         }
       });
     }
@@ -605,11 +591,9 @@
       table.addRows(formattedRows);
 
       const chart = new google.visualization.OrgChart(chartDiv);
-      chart.draw(table, { allowHtml: true, size: "small" }); /* ✅ smaller = more compact */
+      chart.draw(table, { allowHtml: true, size: "small" }); /* compact */
 
-      // Update UI meta
       setStatus("Loaded " + formattedRows.length + " people (" + tabName + ").");
-      subtitle.textContent = "Live data (" + tabName + ")";
       meta.textContent = "Source: " + sourceUrl;
 
       const now = new Date();
@@ -620,17 +604,10 @@
 
     function escapeHtml(str) {
       return String(str).replace(/[&<>"']/g, function(s) {
-        return {
-          "&": "&amp;",
-          "<": "&lt;",
-          ">": "&gt;",
-          '"': "&quot;",
-          "'": "&#39;"
-        }[s];
+        return { "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[s];
       });
     }
 
-    // Safe global image fallback (no inline JS)
     document.addEventListener("error", function(e) {
       if (e.target && e.target.tagName === "IMG") {
         e.target.src = "https://via.placeholder.com/64?text=?";
