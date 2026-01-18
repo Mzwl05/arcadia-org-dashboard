@@ -26,11 +26,11 @@
     }
 
     *{ box-sizing:border-box; }
+    html, body { height: 100%; }
     body{
       font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: var(--bg);
       margin: 0;
-      height: 100vh;
       display: flex;
       flex-direction: column;
       color: var(--text);
@@ -57,12 +57,12 @@
 
     .logo{ height: 24px; width: auto; display:block; }
 
-    .title-wrap{ display:flex; flex-direction:column; gap: 1px; min-width: 0; }
+    .title-wrap{ display:flex; flex-direction:column; gap: 2px; min-width: 0; }
 
     .toolbar h1{
       margin:0;
       font-size: 15px;
-      font-weight: 800;
+      font-weight: 850;
       letter-spacing: -0.01em;
       color: var(--dg1);
       line-height: 1.1;
@@ -74,7 +74,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 55vw;
+      max-width: 58vw;
     }
 
     .actions{
@@ -93,7 +93,7 @@
       padding: 7px 9px;
       border-radius: 10px;
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 800;
       cursor:pointer;
       transition: border-color .15s ease, transform .08s ease, background .15s ease;
       text-decoration: none;
@@ -133,7 +133,7 @@
 
     .zoom-pill{
       font-size: 11px;
-      font-weight: 800;
+      font-weight: 900;
       color: var(--muted);
       padding: 0 6px;
       min-width: 46px;
@@ -149,7 +149,7 @@
       padding: 7px 9px;
       border-radius: 10px;
       font-size: 12px;
-      font-weight: 800;
+      font-weight: 900;
       cursor:pointer;
       line-height: 1;
     }
@@ -169,7 +169,7 @@
       border-radius: 12px;
       background: var(--panel);
       font-size: 12px;
-      font-weight: 800;
+      font-weight: 900;
       color: var(--dg1);
       user-select:none;
     }
@@ -204,11 +204,11 @@
       border-color: rgba(14,116,78,0.35);
     }
 
-    /* =============== Main Area =============== */
+    /* =============== Main Area (fits one window) =============== */
     #chart_outer{
       flex: 1;
       overflow: auto;
-      padding: 8px 8px 10px;
+      padding: 8px 10px 10px;
     }
 
     /* Zoom wrapper: we scale THIS */
@@ -220,7 +220,7 @@
 
     #chart_div{
       text-align:center;
-      padding: 2px 0 6px;
+      padding: 0;
     }
 
     /* Bottom status */
@@ -254,7 +254,7 @@
       border: 1px solid var(--border);
       background: rgba(62, 144, 113, 0.10);
       color: var(--dg1);
-      font-weight: 800;
+      font-weight: 900;
     }
 
     .dot{ width: 8px; height: 8px; border-radius: 50%; background: var(--lime); }
@@ -282,7 +282,7 @@
       border-collapse: collapse !important;
     }
     .google-visualization-orgchart-table td{
-      padding: 0px 2px !important;
+      padding: 0px 1px !important;
       vertical-align: top !important;
     }
 
@@ -290,17 +290,17 @@
     .google-visualization-orgchart-lineleft,
     .google-visualization-orgchart-lineright,
     .google-visualization-orgchart-linebottom{
-      border-color: rgba(48, 82, 46, 0.30) !important;
+      border-color: rgba(48, 82, 46, 0.28) !important;
       border-width: 2px !important;
     }
 
-    /* =============== Default Node Card (compact) =============== */
+    /* =============== Node Card (default compact) =============== */
     .node-card{
-      width: 140px;
+      width: 132px;
       background: var(--panel);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 8px 8px 7px;
+      padding: 7px 7px 6px;
       display:flex;
       flex-direction: column;
       align-items:center;
@@ -311,8 +311,8 @@
       background: var(--wash);
     }
     .node-photo{
-      width: 40px;
-      height: 40px;
+      width: 38px;
+      height: 38px;
       border-radius: 999px;
       object-fit: cover;
       background: rgba(12, 52, 10, 0.06);
@@ -320,20 +320,20 @@
       margin-bottom: 6px;
     }
     .node-name{
-      font-weight: 850;
-      font-size: 12.3px;
+      font-weight: 900;
+      font-size: 12px;
       letter-spacing: -0.01em;
       margin-bottom: 2px;
       color: var(--dg1);
       text-align:center;
-      line-height: 1.1;
+      line-height: 1.08;
     }
     .node-role{
-      font-size: 11px;
+      font-size: 10.5px;
       color: var(--muted);
-      font-weight: 700;
+      font-weight: 800;
       text-align:center;
-      line-height: 1.15;
+      line-height: 1.1;
     }
     .node-accent{
       margin-top: 6px;
@@ -346,55 +346,57 @@
 
     /* =============== COMPACT VIEW (no photos) =============== */
     body.compact .node-card{
-      width: 120px;
-      padding: 6px 7px 6px;
+      width: 118px;
+      padding: 6px 6px 6px;
       border-radius: 9px;
     }
-    body.compact .node-photo{
-      display:none !important;
-    }
+    body.compact .node-photo,
     body.compact .node-accent{
       display:none !important;
     }
-    body.compact .node-name{
-      font-size: 12px;
-      margin-bottom: 2px;
-      line-height: 1.1;
-    }
-    body.compact .node-role{
-      font-size: 10.5px;
-      line-height: 1.1;
-    }
-    body.compact .google-visualization-orgchart-table td{
-      padding: 0px 1px !important; /* even tighter */
+    body.compact .node-name{ font-size: 12px; }
+    body.compact .node-role{ font-size: 10px; }
+
+    /* =============== Fit-to-window mode tweaks =============== */
+    body.fitmode #chart_outer{
+      overflow: hidden;              /* so it looks like one "page" */
     }
 
-    /* =============== PRINT: force one page =============== */
+    /* =============== PRINT MODE =============== */
+    body.printmode{
+      background: #fff;
+    }
+    body.printmode #chart_outer{
+      overflow: visible;
+      padding: 0;
+    }
+
+    /* Print styles: one-page PDF */
     @media print{
-      .toolbar, #status { display: none !important; }
-      body { background: #fff !important; }
-      #chart_outer { padding: 0 !important; overflow: visible !important; }
-      #chart_div { padding: 0 !important; }
+      .toolbar, #status{ display:none !important; }
+      body{ background:#fff !important; }
 
-      /* Use the current zoom if user set it, but cap to fit page */
-      #chart_scale{
-        transform: scale(0.70) !important;
-        transform-origin: top center !important;
-      }
+      #chart_outer{ padding:0 !important; overflow: visible !important; }
+      #chart_scale{ transform-origin: top center !important; }
 
+      /* Tell browser not to split */
       #chart_outer, #chart_scale, #chart_div{
         page-break-inside: avoid !important;
         break-inside: avoid !important;
       }
 
-      @page {
+      /* Letter landscape (change to A4 if needed) */
+      @page{
         size: letter landscape;
         margin: 0.35in;
       }
+    }
 
-      /* Print automatically in compact mode unless user turns it off before printing */
-      body:not(.compact) .node-photo{ display:none !important; }
-      body:not(.compact) .node-accent{ display:none !important; }
+    /* Focus */
+    .btn:focus, .toggle:focus-within{
+      outline: none;
+      box-shadow: 0 0 0 4px var(--focus);
+      border-color: rgba(186, 201, 41, 0.75);
     }
   </style>
 </head>
@@ -412,10 +414,17 @@
     <div class="actions">
       <select class="select" id="tabSelect" title="Select organization view"></select>
 
-      <!-- ✅ NEW: Compact toggle (removes pictures) -->
+      <!-- Compact view toggle -->
       <label class="toggle" title="Compact view (removes photos)">
         Compact
         <input id="compactToggle" type="checkbox">
+        <span class="switch" aria-hidden="true"><span class="knob"></span></span>
+      </label>
+
+      <!-- ✅ NEW: Fit-to-window toggle -->
+      <label class="toggle" title="Fit chart to one window">
+        Fit to Page
+        <input id="fitToggle" type="checkbox" checked>
         <span class="switch" aria-hidden="true"><span class="knob"></span></span>
       </label>
 
@@ -429,6 +438,9 @@
       <a class="btn" id="sheetLink" href="#" target="_blank" rel="noopener noreferrer" title="Open the editable org chart spreadsheet">
         Edit Spreadsheet
       </a>
+
+      <!-- ✅ NEW: Print button -->
+      <button class="btn" id="printBtn" title="Print to one-page PDF">Print</button>
 
       <button class="btn btn-primary" id="refreshBtn">Refresh</button>
     </div>
@@ -469,14 +481,94 @@
     const timestampEl = document.getElementById("timestamp");
     const tabSelect = document.getElementById("tabSelect");
     const compactToggle = document.getElementById("compactToggle");
+    const fitToggle = document.getElementById("fitToggle");
+    const chartOuter = document.getElementById("chart_outer");
+    const scaleEl = document.getElementById("chart_scale");
+    const zoomLabel = document.getElementById("zoomLabel");
 
-    // Persist compact setting
+    // Persist toggle settings
     const COMPACT_KEY = "arcadia_org_compact";
+    const FIT_KEY = "arcadia_org_fitmode";
     const savedCompact = localStorage.getItem(COMPACT_KEY);
+    const savedFit = localStorage.getItem(FIT_KEY);
+
     if (savedCompact === "1") {
       compactToggle.checked = true;
       document.body.classList.add("compact");
     }
+    if (savedFit !== null) {
+      fitToggle.checked = (savedFit === "1");
+    }
+
+    // ====== Zoom state ======
+    let zoom = 1.0;
+    const ZOOM_MIN = 0.25;
+    const ZOOM_MAX = 1.6;
+    const ZOOM_STEP = 0.1;
+
+    function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+
+    function applyZoom() {
+      zoom = clamp(zoom, ZOOM_MIN, ZOOM_MAX);
+      scaleEl.style.transform = "scale(" + zoom.toFixed(3) + ")";
+      zoomLabel.textContent = Math.round(zoom * 100) + "%";
+    }
+
+    function setStatus(msg) { statusText.textContent = msg; }
+
+    // ✅ Fit-to-window: compute best zoom so chart fits inside visible area
+    function fitToWindow() {
+      if (!fitToggle.checked) return;
+
+      // temporarily reset scale to measure true size
+      const prev = scaleEl.style.transform;
+      scaleEl.style.transform = "scale(1)";
+      // Ensure layout is up-to-date
+      const chartRect = scaleEl.getBoundingClientRect();
+      const outerRect = chartOuter.getBoundingClientRect();
+      scaleEl.style.transform = prev;
+
+      // available space: subtract padding-ish allowance
+      const availW = outerRect.width - 16;
+      const availH = outerRect.height - 16;
+
+      if (chartRect.width <= 0 || chartRect.height <= 0) return;
+
+      const sW = availW / chartRect.width;
+      const sH = availH / chartRect.height;
+
+      // choose the smaller scale so it fits both directions, then pad a bit
+      const target = Math.min(sW, sH) * 0.98;
+      zoom = clamp(target, ZOOM_MIN, ZOOM_MAX);
+      applyZoom();
+    }
+
+    function setFitModeUI() {
+      if (fitToggle.checked) {
+        document.body.classList.add("fitmode");
+      } else {
+        document.body.classList.remove("fitmode");
+      }
+    }
+
+    // Controls
+    document.getElementById("zoomInBtn").addEventListener("click", () => { zoom += ZOOM_STEP; applyZoom(); });
+    document.getElementById("zoomOutBtn").addEventListener("click", () => { zoom -= ZOOM_STEP; applyZoom(); });
+    document.getElementById("zoomResetBtn").addEventListener("click", () => { zoom = 1.0; applyZoom(); });
+
+    // Ctrl/⌘ + wheel to zoom
+    chartOuter.addEventListener("wheel", (e) => {
+      const ctrlOrCmd = e.ctrlKey || e.metaKey;
+      if (!ctrlOrCmd) return;
+      e.preventDefault();
+      zoom += (e.deltaY > 0 ? -ZOOM_STEP : ZOOM_STEP);
+      applyZoom();
+    }, { passive: false });
+
+    document.getElementById("refreshBtn").addEventListener("click", () => {
+      const selectedTab = tabSelect.value;
+      if (selectedTab) loadOrgTab(selectedTab);
+    });
 
     compactToggle.addEventListener("change", () => {
       if (compactToggle.checked) {
@@ -486,62 +578,66 @@
         document.body.classList.remove("compact");
         localStorage.setItem(COMPACT_KEY, "0");
       }
-      // Redraw chart so Google OrgChart recalculates node sizes
       const selectedTab = tabSelect.value;
-      if (selectedTab) loadOrgTab(selectedTab);
+      if (selectedTab) loadOrgTab(selectedTab); // redraw with/without photos
     });
 
-    document.getElementById("refreshBtn").addEventListener("click", () => {
+    fitToggle.addEventListener("change", () => {
+      localStorage.setItem(FIT_KEY, fitToggle.checked ? "1" : "0");
+      setFitModeUI();
+      // Re-fit after toggle
+      setTimeout(fitToWindow, 50);
+    });
+
+    // ✅ Print workflow: switch to compact+fit, auto scale for single-page, then print
+    document.getElementById("printBtn").addEventListener("click", async () => {
+      // Enter print mode (affects overflow/padding)
+      document.body.classList.add("printmode");
+
+      // For printing, compact helps ensure one page.
+      // Keep user's compact toggle state, but force compact temporarily if off.
+      const compactWasOn = document.body.classList.contains("compact");
+      if (!compactWasOn) document.body.classList.add("compact");
+
+      // Force fit mode temporarily
+      const fitWasOn = fitToggle.checked;
+      fitToggle.checked = true;
+      setFitModeUI();
+
+      // Re-draw current tab (ensures photo removal + compact card HTML)
       const selectedTab = tabSelect.value;
-      if (selectedTab) loadOrgTab(selectedTab);
+      if (selectedTab) await loadOrgTab(selectedTab, { silent: true });
+
+      // Fit to visible window before print, then do one more conservative shrink for print
+      setTimeout(() => {
+        fitToWindow();
+        // conservative extra shrink in case printer margins differ
+        zoom = clamp(zoom * 0.92, ZOOM_MIN, ZOOM_MAX);
+        applyZoom();
+
+        window.print();
+
+        // Restore after print dialog closes (best-effort)
+        setTimeout(() => {
+          document.body.classList.remove("printmode");
+          if (!compactWasOn) document.body.classList.remove("compact");
+          fitToggle.checked = fitWasOn;
+          setFitModeUI();
+          fitToWindow();
+        }, 250);
+      }, 150);
     });
 
-    // ====== Zoom state ======
-    const scaleEl = document.getElementById("chart_scale");
-    const zoomLabel = document.getElementById("zoomLabel");
-    let zoom = 1.0;
-    const ZOOM_MIN = 0.45;
-    const ZOOM_MAX = 1.6;
-    const ZOOM_STEP = 0.1;
-
-    function applyZoom() {
-      zoom = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, zoom));
-      scaleEl.style.transform = "scale(" + zoom.toFixed(2) + ")";
-      zoomLabel.textContent = Math.round(zoom * 100) + "%";
-    }
-
-    document.getElementById("zoomInBtn").addEventListener("click", () => {
-      zoom += ZOOM_STEP;
-      applyZoom();
-    });
-    document.getElementById("zoomOutBtn").addEventListener("click", () => {
-      zoom -= ZOOM_STEP;
-      applyZoom();
-    });
-    document.getElementById("zoomResetBtn").addEventListener("click", () => {
-      zoom = 1.0;
-      applyZoom();
-    });
-
-    // Ctrl/⌘ + wheel to zoom
-    document.getElementById("chart_outer").addEventListener("wheel", (e) => {
-      const ctrlOrCmd = e.ctrlKey || e.metaKey;
-      if (!ctrlOrCmd) return;
-      e.preventDefault();
-      zoom += (e.deltaY > 0 ? -ZOOM_STEP : ZOOM_STEP);
-      applyZoom();
-    }, { passive: false });
+    // Re-fit on window resize
+    window.addEventListener("resize", () => setTimeout(fitToWindow, 100));
 
     // ====== Load + Render ======
     google.charts.load("current", { packages: ["orgchart"] });
     google.charts.setOnLoadCallback(init);
 
-    function setStatus(msg) {
-      statusText.textContent = msg;
-    }
-
     function init() {
       applyZoom();
+      setFitModeUI();
       loadIndexTabs();
     }
 
@@ -589,30 +685,37 @@
       });
     }
 
-    function loadOrgTab(tabName) {
-      if (!tabName) return;
+    // Promise-based loader (so print flow can await redraw)
+    function loadOrgTab(tabName, opts = {}) {
+      return new Promise((resolve) => {
+        if (!tabName) { resolve(); return; }
 
-      setStatus("Fetching " + tabName + "…");
-      subtitle.textContent = "Live data (" + tabName + ")";
-      chartDiv.textContent = "Loading chart…";
-
-      const url = sheetCsvUrlByName(tabName);
-
-      Papa.parse(url, {
-        download: true,
-        header: true,
-        skipEmptyLines: true,
-        complete: function(results) {
-          const rows = (results && results.data) ? results.data : [];
-          setStatus("Rendering " + tabName + "…");
-          drawChart(rows, tabName, url);
-        },
-        error: function(err) {
-          console.error(err);
-          chartDiv.textContent = "Error loading data for " + tabName + ".";
-          setStatus("Failed to fetch " + tabName + " data.");
-          subtitle.textContent = "Check tab name spelling in INDEX.";
+        if (!opts.silent) {
+          setStatus("Fetching " + tabName + "…");
+          subtitle.textContent = "Live data (" + tabName + ")";
+          chartDiv.textContent = "Loading chart…";
         }
+
+        const url = sheetCsvUrlByName(tabName);
+
+        Papa.parse(url, {
+          download: true,
+          header: true,
+          skipEmptyLines: true,
+          complete: function(results) {
+            const rows = (results && results.data) ? results.data : [];
+            if (!opts.silent) setStatus("Rendering " + tabName + "…");
+            drawChart(rows, tabName, url);
+            resolve();
+          },
+          error: function(err) {
+            console.error(err);
+            chartDiv.textContent = "Error loading data for " + tabName + ".";
+            setStatus("Failed to fetch " + tabName + " data.");
+            subtitle.textContent = "Check tab name spelling in INDEX.";
+            resolve();
+          }
+        });
       });
     }
 
@@ -629,6 +732,7 @@
       table.addColumn("string", "ToolTip");
 
       const formattedRows = [];
+      const isCompact = document.body.classList.contains("compact");
 
       data.forEach(row => {
         const name = (row["Employee Name"] || "").trim();
@@ -638,8 +742,6 @@
 
         if (!name) return;
 
-        // If compact mode, skip photo entirely (faster + cleaner)
-        const isCompact = document.body.classList.contains("compact");
         if (!isCompact && !photo) {
           photo = "https://ui-avatars.com/api/?name=" + encodeURIComponent(name) + "&background=random&color=fff&size=128";
         }
@@ -666,7 +768,11 @@
       const now = new Date();
       timestampEl.textContent = "Last updated: " + now.toLocaleString();
 
-      applyZoom();
+      // After render, fit to window if enabled
+      setTimeout(() => {
+        if (fitToggle.checked) fitToWindow();
+        else applyZoom();
+      }, 50);
     }
 
     function escapeHtml(str) {
@@ -675,12 +781,15 @@
       });
     }
 
-    // Global image fallback (no inline JS)
+    // Global image fallback
     document.addEventListener("error", function(e) {
       if (e.target && e.target.tagName === "IMG") {
         e.target.src = "https://via.placeholder.com/64?text=?";
       }
     }, true);
+
+    // Start with fitmode UI applied
+    setFitModeUI();
   </script>
 </body>
 </html>
