@@ -57,6 +57,7 @@
       align-items:center;
       justify-content:space-between;
       gap: 12px;
+      flex-wrap: wrap;
     }
 
     .brand{
@@ -116,11 +117,12 @@
       font-weight: 650;
       cursor:pointer;
       transition: border-color .15s ease, transform .08s ease, background .15s ease;
-      text-decoration: none; /* so <a class="btn"> looks like button */
+      text-decoration: none;
       display:inline-flex;
       align-items:center;
       justify-content:center;
       line-height: 1;
+      white-space: nowrap;
     }
     .btn:hover{
       border-color: var(--border-strong);
@@ -159,11 +161,29 @@
       user-select:none;
     }
 
+    .select{
+      appearance:none;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--dg1);
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor:pointer;
+      line-height: 1;
+    }
+    .select:focus{
+      outline: none;
+      box-shadow: 0 0 0 4px var(--focus);
+      border-color: rgba(186, 201, 41, 0.75);
+    }
+
     /* =============== Main Area =============== */
     #chart_outer{
       flex: 1;
       overflow: auto;
-      padding: 24px 18px 18px;
+      padding: 14px 12px 12px; /* tighter padding for one-pager feel */
     }
 
     /* Zoom wrapper: we scale THIS */
@@ -175,7 +195,7 @@
 
     #chart_div{
       text-align:center;
-      padding: 10px 0 20px;
+      padding: 6px 0 10px; /* tighter */
     }
 
     /* Bottom status */
@@ -238,69 +258,75 @@
       outline: none !important;
     }
 
+    /* Tighter layout: reduce internal padding around chart cells */
+    .google-visualization-orgchart-table{
+      border-collapse: collapse !important;
+    }
+    .google-visualization-orgchart-table td{
+      padding: 2px 4px !important;   /* ✅ reduces node spacing */
+      vertical-align: top !important;
+    }
+
     /* Connector lines */
     .google-visualization-orgchart-lineleft,
     .google-visualization-orgchart-lineright,
     .google-visualization-orgchart-linebottom{
-      border-color: rgba(48, 82, 46, 0.35) !important; /* Dark Green 2 softened */
+      border-color: rgba(48, 82, 46, 0.35) !important;
       border-width: 2px !important;
     }
 
-    /* =============== Minimalist Node Card (no shadows) =============== */
+    /* =============== Minimalist Node Card (compact for one-pager) =============== */
     .node-card{
-      width: 190px;
+      width: 165px;                 /* ✅ narrower to fit one-pager */
       background: var(--panel);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 14px 14px 12px;
+      border-radius: 12px;
+      padding: 10px 10px 9px;       /* ✅ smaller padding */
       display:flex;
       flex-direction: column;
       align-items:center;
-
-      /* ✅ Completely remove shadows for perfect alignment */
-      box-shadow: none !important;
-
+      box-shadow: none !important;  /* keep crisp borders */
       transition: border-color .16s ease, transform .12s ease, background .16s ease;
     }
 
     .node-card:hover{
       border-color: rgba(186, 201, 41, 0.75);
-      transform: translateY(-2px);
+      transform: translateY(-1px);
       background: var(--wash);
     }
 
     .node-photo{
-      width: 58px;
-      height: 58px;
+      width: 48px;                  /* ✅ smaller photo */
+      height: 48px;
       border-radius: 999px;
       object-fit: cover;
       background: rgba(12, 52, 10, 0.06);
       border: 2px solid rgba(62, 144, 113, 0.18);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .node-name{
       font-weight: 800;
-      font-size: 14.5px;
+      font-size: 13.5px;            /* ✅ smaller text */
       letter-spacing: -0.01em;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
       color: var(--dg1);
+      text-align:center;
+      line-height: 1.15;
+    }
+
+    .node-role{
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 650;
       text-align:center;
       line-height: 1.2;
     }
 
-    .node-role{
-      font-size: 12.5px;
-      color: var(--muted);
-      font-weight: 650;
-      text-align:center;
-      line-height: 1.25;
-    }
-
     .node-accent{
-      margin-top: 10px;
-      height: 4px;
-      width: 44px;
+      margin-top: 8px;
+      height: 3px;                  /* ✅ slimmer accent */
+      width: 40px;
       border-radius: 999px;
       background: linear-gradient(90deg, var(--lime), var(--ga));
       opacity: .95;
@@ -312,13 +338,18 @@
       box-shadow: 0 0 0 4px var(--focus);
       border-color: rgba(186, 201, 41, 0.75);
     }
+
+    @media print{
+      .toolbar, #status { display: none !important; }
+      #chart_outer { padding: 0 !important; }
+      body { background: #fff !important; }
+    }
   </style>
 </head>
 
 <body>
   <div class="toolbar">
     <div class="brand">
-      <!-- ✅ Arcadia logo -->
       <img class="logo" alt="Arcadia eFuels" src="https://arcadiaefuels.com/wp-content/uploads/2022/12/Arcadia-Identity.svg">
       <div class="title-wrap">
         <h1>Organization Dashboard</h1>
@@ -327,6 +358,9 @@
     </div>
 
     <div class="actions">
+      <!-- ✅ NEW: Tab selector (TOPCO / ENDOR / any new sheet tab) -->
+      <select class="select" id="tabSelect" title="Select organization view"></select>
+
       <div class="zoom-group" aria-label="Zoom controls">
         <button class="btn" id="zoomOutBtn" title="Zoom out">−</button>
         <div class="zoom-pill" id="zoomLabel">100%</div>
@@ -334,12 +368,11 @@
         <button class="btn" id="zoomResetBtn" title="Reset zoom">Reset</button>
       </div>
 
-      <!-- ✅ Link to editable spreadsheet (opens in new tab) -->
       <a class="btn" id="sheetLink" href="#" target="_blank" rel="noopener noreferrer" title="Open the editable org chart spreadsheet">
         Edit Spreadsheet
       </a>
 
-      <button class="btn btn-primary" onclick="location.reload()">Refresh</button>
+      <button class="btn btn-primary" id="refreshBtn">Refresh</button>
     </div>
   </div>
 
@@ -358,15 +391,37 @@
   </div>
 
   <script>
-    // ====== Published CSV (used for reading data) ======
-    const CSV_URL =
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vTM68SFLmYxbeh8QmNTlZ2_UQ6GNIVM_NZt24oW2cPZVvO77El9FlJe4yWgJ1co1NkUv2apsKebp2eS/pub?output=csv";
+    // =========================
+    // REQUIRED GOOGLE SHEET SETUP FOR MULTI-TAB DASHBOARD
+    // -------------------------
+    // 1) Create a tab named "INDEX" in your spreadsheet.
+    // 2) In INDEX!A1, put header: Tab
+    // 3) In INDEX!A2:A, list the sheet tabs you want to show, e.g.:
+    //      TOPCO
+    //      ENDOR
+    //      (any future tab names)
+    //
+    // Each listed tab must have the SAME columns:
+    //   Employee Name | Manager Name | Role | Photo URL
+    // =========================
 
-    // ====== Editable Sheet Link (for editors) ======
-    // NOTE: This is the sheet’s “normal” link (not the /pub CSV).
-    // If you prefer a different internal link, replace this URL.
+    // ====== Spreadsheet ID (used to build per-tab published CSV URLs) ======
+    const SPREADSHEET_ID = "1oqcjp0sru7lC3Qt6XpiRt3uyCf0EHAjFx20VieZJUnU";
+
+    // ====== Published base (public) — we will fetch per-tab CSV using GViz ======
+    // This does NOT require knowing GID values.
+    function sheetCsvUrlByName(sheetName){
+      // Google Visualization API returns CSV for a specific sheet tab name
+      return "https://docs.google.com/spreadsheets/d/" + SPREADSHEET_ID +
+             "/gviz/tq?tqx=out:csv&sheet=" + encodeURIComponent(sheetName);
+    }
+
+    // Index tab that lists which tabs to show in the dashboard
+    const INDEX_SHEET_NAME = "INDEX";
+
+    // Editable sheet link
     const EDIT_SHEET_URL =
-      "https://docs.google.com/spreadsheets/d/1oqcjp0sru7lC3Qt6XpiRt3uyCf0EHAjFx20VieZJUnU/edit?gid=441829817#gid=441829817";
+      "https://docs.google.com/spreadsheets/d/" + SPREADSHEET_ID + "/edit";
 
     document.getElementById("sheetLink").href = EDIT_SHEET_URL;
 
@@ -375,6 +430,13 @@
     const subtitle = document.getElementById("subtitle");
     const meta = document.getElementById("meta");
     const timestampEl = document.getElementById("timestamp");
+    const tabSelect = document.getElementById("tabSelect");
+
+    document.getElementById("refreshBtn").addEventListener("click", () => {
+      // refresh current tab without reloading page
+      const selectedTab = tabSelect.value;
+      if (selectedTab) loadOrgTab(selectedTab);
+    });
 
     // ====== Zoom state ======
     const scaleEl = document.getElementById("chart_scale");
@@ -414,38 +476,96 @@
 
     // ====== Load + Render ======
     google.charts.load("current", { packages: ["orgchart"] });
-    google.charts.setOnLoadCallback(loadCSV);
+    google.charts.setOnLoadCallback(init);
 
     function setStatus(msg) {
       statusText.textContent = msg;
     }
 
-    function loadCSV() {
-      setStatus("Fetching CSV…");
-      subtitle.textContent = "Fetching live org data…";
+    function init() {
+      applyZoom();
+      loadIndexTabs();
+    }
 
-      Papa.parse(CSV_URL, {
+    function loadIndexTabs() {
+      setStatus("Fetching tabs…");
+      subtitle.textContent = "Loading available organization views…";
+
+      const url = sheetCsvUrlByName(INDEX_SHEET_NAME);
+
+      Papa.parse(url, {
         download: true,
         header: true,
         skipEmptyLines: true,
         complete: function(results) {
           const rows = (results && results.data) ? results.data : [];
-          setStatus("Rendering chart…");
-          drawChart(rows);
+          const tabs = rows
+            .map(r => (r["Tab"] || "").trim())
+            .filter(Boolean);
+
+          if (!tabs.length) {
+            chartDiv.textContent = "No tabs found. Create an INDEX sheet with a 'Tab' column listing TOPCO, ENDOR, etc.";
+            setStatus("Missing INDEX tab configuration.");
+            subtitle.textContent = "Please configure INDEX sheet.";
+            meta.textContent = "Expected: INDEX!A1 = Tab, INDEX!A2.. = tab names";
+            return;
+          }
+
+          // Populate dropdown
+          tabSelect.innerHTML = "";
+          tabs.forEach(t => {
+            const opt = document.createElement("option");
+            opt.value = t;
+            opt.textContent = t;
+            tabSelect.appendChild(opt);
+          });
+
+          tabSelect.addEventListener("change", () => loadOrgTab(tabSelect.value));
+
+          // Load first tab by default
+          setStatus("Ready.");
+          loadOrgTab(tabs[0]);
         },
         error: function(err) {
           console.error(err);
-          chartDiv.textContent = "Error loading CSV.";
-          setStatus("Failed to fetch spreadsheet data.");
-          subtitle.textContent = "Check that the sheet is published and accessible.";
+          chartDiv.textContent = "Error loading tab index.";
+          setStatus("Failed to fetch INDEX sheet.");
+          subtitle.textContent = "Check that your sheet is accessible and INDEX tab exists.";
         }
       });
     }
 
-    function drawChart(data) {
+    function loadOrgTab(tabName) {
+      if (!tabName) return;
+
+      setStatus("Fetching " + tabName + "…");
+      subtitle.textContent = "Fetching live org data (" + tabName + ")…";
+      chartDiv.textContent = "Loading chart…";
+
+      const url = sheetCsvUrlByName(tabName);
+
+      Papa.parse(url, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+          const rows = (results && results.data) ? results.data : [];
+          setStatus("Rendering " + tabName + "…");
+          drawChart(rows, tabName, url);
+        },
+        error: function(err) {
+          console.error(err);
+          chartDiv.textContent = "Error loading data for " + tabName + ".";
+          setStatus("Failed to fetch " + tabName + " data.");
+          subtitle.textContent = "Check that the tab exists and is spelled exactly as listed in INDEX.";
+        }
+      });
+    }
+
+    function drawChart(data, tabName, sourceUrl) {
       if (!data || data.length === 0) {
-        chartDiv.textContent = "No data found.";
-        setStatus("Spreadsheet is empty.");
+        chartDiv.textContent = "No data found in " + tabName + ".";
+        setStatus("Tab is empty.");
         return;
       }
 
@@ -485,17 +605,16 @@
       table.addRows(formattedRows);
 
       const chart = new google.visualization.OrgChart(chartDiv);
-      chart.draw(table, { allowHtml: true, size: "medium" });
+      chart.draw(table, { allowHtml: true, size: "small" }); /* ✅ smaller = more compact */
 
       // Update UI meta
-      setStatus("Loaded " + formattedRows.length + " people.");
-      subtitle.textContent = "Live data from published Google Sheet CSV";
-      meta.textContent = "Source: " + CSV_URL;
+      setStatus("Loaded " + formattedRows.length + " people (" + tabName + ").");
+      subtitle.textContent = "Live data (" + tabName + ")";
+      meta.textContent = "Source: " + sourceUrl;
 
       const now = new Date();
       timestampEl.textContent = "Last updated: " + now.toLocaleString();
 
-      // Ensure zoom is applied after render
       applyZoom();
     }
 
