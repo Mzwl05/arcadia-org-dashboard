@@ -26,6 +26,7 @@
     }
 
     *{ box-sizing:border-box; }
+
     body{
       font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: var(--bg);
@@ -40,7 +41,7 @@
     .toolbar{
       background: var(--panel);
       border-bottom: 1px solid var(--border);
-      padding: 10px 12px;
+      padding: 10px 12px; /* tighter */
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -55,9 +56,18 @@
       min-width: 0;
     }
 
-    .logo{ height: 24px; width: auto; display:block; }
+    .logo{
+      height: 24px;
+      width: auto;
+      display:block;
+    }
 
-    .title-wrap{ display:flex; flex-direction:column; gap: 1px; min-width: 0; }
+    .title-wrap{
+      display:flex;
+      flex-direction:column;
+      gap: 1px;
+      min-width: 0;
+    }
 
     .toolbar h1{
       margin:0;
@@ -90,7 +100,7 @@
       border: 1px solid var(--border);
       background: var(--panel);
       color: var(--dg1);
-      padding: 7px 9px;
+      padding: 7px 9px; /* tighter */
       border-radius: 10px;
       font-size: 12px;
       font-weight: 700;
@@ -102,7 +112,6 @@
       justify-content:center;
       line-height: 1;
       white-space: nowrap;
-      user-select:none;
     }
     .btn:hover{
       border-color: var(--border-strong);
@@ -159,56 +168,11 @@
       border-color: rgba(186, 201, 41, 0.75);
     }
 
-    /* ===== Toggle switch ===== */
-    .toggle{
-      display:inline-flex;
-      align-items:center;
-      gap: 8px;
-      padding: 6px 9px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: var(--panel);
-      font-size: 12px;
-      font-weight: 800;
-      color: var(--dg1);
-      user-select:none;
-    }
-    .toggle input{ display:none; }
-    .switch{
-      width: 40px;
-      height: 22px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(48,82,46,0.08);
-      position: relative;
-      transition: background .15s ease, border-color .15s ease;
-      flex: 0 0 auto;
-    }
-    .knob{
-      width: 18px;
-      height: 18px;
-      border-radius: 999px;
-      background: #fff;
-      border: 1px solid var(--border);
-      position:absolute;
-      top: 1px;
-      left: 1px;
-      transition: left .15s ease, border-color .15s ease;
-    }
-    .toggle input:checked + .switch{
-      background: rgba(14,116,78,0.18);
-      border-color: rgba(14,116,78,0.35);
-    }
-    .toggle input:checked + .switch .knob{
-      left: 20px;
-      border-color: rgba(14,116,78,0.35);
-    }
-
     /* =============== Main Area =============== */
     #chart_outer{
       flex: 1;
       overflow: auto;
-      padding: 8px 8px 10px;
+      padding: 8px 8px 10px; /* tighter */
     }
 
     /* Zoom wrapper: we scale THIS */
@@ -220,7 +184,7 @@
 
     #chart_div{
       text-align:center;
-      padding: 2px 0 6px;
+      padding: 2px 0 6px; /* tighter */
     }
 
     /* Bottom status */
@@ -257,7 +221,12 @@
       font-weight: 800;
     }
 
-    .dot{ width: 8px; height: 8px; border-radius: 50%; background: var(--lime); }
+    .dot{
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--lime);
+    }
 
     #meta{
       color: var(--muted2);
@@ -277,7 +246,7 @@
       outline: none !important;
     }
 
-    /* Tight spacing between nodes */
+    /* ✅ Most impactful change: reduce table cell padding dramatically */
     .google-visualization-orgchart-table{
       border-collapse: collapse !important;
     }
@@ -294,22 +263,24 @@
       border-width: 2px !important;
     }
 
-    /* =============== Default Node Card (compact) =============== */
+    /* =============== Ultra-Compact Node Card (one-page print) =============== */
     .node-card{
-      width: 140px;
+      width: 140px;                 /* smaller */
       background: var(--panel);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 8px 8px 7px;
+      padding: 8px 8px 7px;         /* tighter */
       display:flex;
       flex-direction: column;
       align-items:center;
       box-shadow: none !important;
     }
+
     .node-card:hover{
       border-color: rgba(186, 201, 41, 0.75);
       background: var(--wash);
     }
+
     .node-photo{
       width: 40px;
       height: 40px;
@@ -319,6 +290,7 @@
       border: 2px solid rgba(62, 144, 113, 0.18);
       margin-bottom: 6px;
     }
+
     .node-name{
       font-weight: 850;
       font-size: 12.3px;
@@ -328,6 +300,7 @@
       text-align:center;
       line-height: 1.1;
     }
+
     .node-role{
       font-size: 11px;
       color: var(--muted);
@@ -335,6 +308,7 @@
       text-align:center;
       line-height: 1.15;
     }
+
     .node-accent{
       margin-top: 6px;
       height: 3px;
@@ -344,57 +318,42 @@
       opacity: .95;
     }
 
-    /* =============== COMPACT VIEW (no photos) =============== */
-    body.compact .node-card{
-      width: 120px;
-      padding: 6px 7px 6px;
-      border-radius: 9px;
-    }
-    body.compact .node-photo{
-      display:none !important;
-    }
-    body.compact .node-accent{
-      display:none !important;
-    }
-    body.compact .node-name{
-      font-size: 12px;
-      margin-bottom: 2px;
-      line-height: 1.1;
-    }
-    body.compact .node-role{
-      font-size: 10.5px;
-      line-height: 1.1;
-    }
-    body.compact .google-visualization-orgchart-table td{
-      padding: 0px 1px !important; /* even tighter */
+    .btn:focus{
+      outline: none;
+      box-shadow: 0 0 0 4px var(--focus);
+      border-color: rgba(186, 201, 41, 0.75);
     }
 
     /* =============== PRINT: force one page =============== */
     @media print{
+      /* Hide controls */
       .toolbar, #status { display: none !important; }
+
+      /* Remove background + extra spacing */
       body { background: #fff !important; }
       #chart_outer { padding: 0 !important; overflow: visible !important; }
       #chart_div { padding: 0 !important; }
 
-      /* Use the current zoom if user set it, but cap to fit page */
+      /*
+        ✅ Key: make the chart scale down for printing so it fits a single page.
+        You can adjust this number if needed.
+      */
       #chart_scale{
-        transform: scale(0.70) !important;
+        transform: scale(0.72) !important;
         transform-origin: top center !important;
       }
 
+      /* Encourage the browser not to split the chart */
       #chart_outer, #chart_scale, #chart_div{
         page-break-inside: avoid !important;
         break-inside: avoid !important;
       }
 
+      /* Set page margins (supported in most browsers) */
       @page {
         size: letter landscape;
         margin: 0.35in;
       }
-
-      /* Print automatically in compact mode unless user turns it off before printing */
-      body:not(.compact) .node-photo{ display:none !important; }
-      body:not(.compact) .node-accent{ display:none !important; }
     }
   </style>
 </head>
@@ -411,13 +370,6 @@
 
     <div class="actions">
       <select class="select" id="tabSelect" title="Select organization view"></select>
-
-      <!-- ✅ NEW: Compact toggle (removes pictures) -->
-      <label class="toggle" title="Compact view (removes photos)">
-        Compact
-        <input id="compactToggle" type="checkbox">
-        <span class="switch" aria-hidden="true"><span class="knob"></span></span>
-      </label>
 
       <div class="zoom-group" aria-label="Zoom controls">
         <button class="btn" id="zoomOutBtn" title="Zoom out">−</button>
@@ -450,7 +402,7 @@
 
   <script>
     // ====== Multi-tab setup ======
-    // INDEX sheet column header: "Tab", with values like TOPCO / ENDOR / ...
+    // Create an INDEX sheet with column header "Tab" and list tabs (TOPCO, ENDOR, etc.)
     const SPREADSHEET_ID = "1oqcjp0sru7lC3Qt6XpiRt3uyCf0EHAjFx20VieZJUnU";
     const INDEX_SHEET_NAME = "INDEX";
 
@@ -468,28 +420,6 @@
     const meta = document.getElementById("meta");
     const timestampEl = document.getElementById("timestamp");
     const tabSelect = document.getElementById("tabSelect");
-    const compactToggle = document.getElementById("compactToggle");
-
-    // Persist compact setting
-    const COMPACT_KEY = "arcadia_org_compact";
-    const savedCompact = localStorage.getItem(COMPACT_KEY);
-    if (savedCompact === "1") {
-      compactToggle.checked = true;
-      document.body.classList.add("compact");
-    }
-
-    compactToggle.addEventListener("change", () => {
-      if (compactToggle.checked) {
-        document.body.classList.add("compact");
-        localStorage.setItem(COMPACT_KEY, "1");
-      } else {
-        document.body.classList.remove("compact");
-        localStorage.setItem(COMPACT_KEY, "0");
-      }
-      // Redraw chart so Google OrgChart recalculates node sizes
-      const selectedTab = tabSelect.value;
-      if (selectedTab) loadOrgTab(selectedTab);
-    });
 
     document.getElementById("refreshBtn").addEventListener("click", () => {
       const selectedTab = tabSelect.value;
@@ -500,7 +430,7 @@
     const scaleEl = document.getElementById("chart_scale");
     const zoomLabel = document.getElementById("zoomLabel");
     let zoom = 1.0;
-    const ZOOM_MIN = 0.45;
+    const ZOOM_MIN = 0.45;     // ✅ allow smaller zoom
     const ZOOM_MAX = 1.6;
     const ZOOM_STEP = 0.1;
 
@@ -557,7 +487,9 @@
         skipEmptyLines: true,
         complete: function(results) {
           const rows = (results && results.data) ? results.data : [];
-          const tabs = rows.map(r => (r["Tab"] || "").trim()).filter(Boolean);
+          const tabs = rows
+            .map(r => (r["Tab"] || "").trim())
+            .filter(Boolean);
 
           if (!tabs.length) {
             chartDiv.textContent = "No tabs found. Add INDEX sheet with header 'Tab' and list TOPCO, ENDOR, etc.";
@@ -638,18 +570,19 @@
 
         if (!name) return;
 
-        // If compact mode, skip photo entirely (faster + cleaner)
-        const isCompact = document.body.classList.contains("compact");
-        if (!isCompact && !photo) {
-          photo = "https://ui-avatars.com/api/?name=" + encodeURIComponent(name) + "&background=random&color=fff&size=128";
+        if (!photo) {
+          photo =
+            "https://ui-avatars.com/api/?name=" +
+            encodeURIComponent(name) +
+            "&background=random&color=fff&size=128";
         }
 
         const card =
           '<div class="node-card">' +
-            (isCompact ? '' : '<img class="node-photo" src="' + photo + '">') +
+            '<img class="node-photo" src="' + photo + '">' +
             '<div class="node-name">' + escapeHtml(name) + '</div>' +
             '<div class="node-role">' + escapeHtml(role) + '</div>' +
-            (isCompact ? '' : '<div class="node-accent"></div>') +
+            '<div class="node-accent"></div>' +
           '</div>';
 
         formattedRows.push([{ v: name, f: card }, manager, role]);
@@ -658,7 +591,7 @@
       table.addRows(formattedRows);
 
       const chart = new google.visualization.OrgChart(chartDiv);
-      chart.draw(table, { allowHtml: true, size: "small" });
+      chart.draw(table, { allowHtml: true, size: "small" }); /* compact */
 
       setStatus("Loaded " + formattedRows.length + " people (" + tabName + ").");
       meta.textContent = "Source: " + sourceUrl;
@@ -675,7 +608,6 @@
       });
     }
 
-    // Global image fallback (no inline JS)
     document.addEventListener("error", function(e) {
       if (e.target && e.target.tagName === "IMG") {
         e.target.src = "https://via.placeholder.com/64?text=?";
